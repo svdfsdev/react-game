@@ -1,3 +1,9 @@
-export const SET_USER = 'SET_USER';
+// Settings
+export const SET_MUSIC_ON_OFF = 'SET_MUSIC_ON_OFF';
+export const SET_SOUND_ON_OFF = 'SET_SOUND_ON_OFF';
 
-export const RESET_USER = 'RESET_USER';
+export const SET_BORDER = 'SET_BORDER';
+export const SET_LEVEL = 'SET_LEVEL';
+
+// Game
+export const PLAY_GAME = 'PLAY_GAME';

@@ -1,31 +1,22 @@
-import { RESET_USER, SET_USER } from '../actions/actionsTypes';
+import { PLAY_GAME, RESET_USER, SET_USER } from '../actions/actionsTypes';
 
 const initialState = {
-  user: {
-    name: 'Guest',
-    email: 'none',
-    isLogin: false,
-  },
+  name: 'Guest',
+  email: 'none',
+  isLogin: false,
 
-  game: {
-    score: 0,
-    duration: 0,
-    steps: [],
-  },
+  isPlaying: false,
+  score: 0,
+  duration: 0,
+  steps: [],
 };
 
 export function gameReducer(state = initialState, action) {
   switch (action.type) {
-    case SET_USER:
+    case PLAY_GAME:
       return {
         ...state,
-        user: action.payload,
-      };
-
-    case RESET_USER:
-      return {
-        ...state,
-        user: initialState.user,
+        isPlaying: !state.isPlaying,
       };
 
     default:

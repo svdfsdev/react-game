@@ -1,61 +1,96 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import './Navbar.scss';
+import {
+  setLevel,
+  turnOnOffBorder,
+  turnOnOffMusic,
+  turnOnOffSound,
+} from '../../actions/settingsActions';
+import { Burger } from '../UI/Burger/Burger';
+import { Button } from '../UI/Button/Button';
+import { Dropdown } from '../UI/Dropdown/Dropdown';
+import {
+  levelIcon,
+  volumeIcon,
+  borderIcon,
+  playPauseIcon,
+} from '../../utils/icons';
+import { levelsList } from '../../utils/guide';
+import { playGame } from '../../actions/gameActions';
 
-// border_clear
-// border_outer
+const Navbar = (props) => {
+  const { isPlaying } = props.game;
+  const { musicOn, soundOn, gameBorder } = props.settings;
+  const {
+    playGame,
+    setLevel,
+    turnOnOffMusic,
+    turnOnOffSound,
+    turnOnOffBorder,
+  } = props;
 
-export const Navbar = () => {
   return (
     <nav className="grey darken-2">
-      <div className="nav-wrapper">
-        <a href="#" data-target="mobile-demo" className="show-on-small sidenav-trigger">
-          <i className="material-icons">menu</i>
-        </a>
+      <Burger />
 
-        <ul id="nav-mobile" className="right">
-          <li>
-            <ul id="dropdown2" className="dropdown-content grey darken-2">
-              <li>
-                <a className="white-text">Easy</a>
-              </li>
-              <li>
-                <a className="white-text">Medium</a>
-              </li>
-              <li>
-                <a className="white-text">Hard</a>
-              </li>
-            </ul>
-            <a className="btn dropdown-trigger grey darken-2 z-depth-0" data-target="dropdown2">
-              Level<i className="material-icons right">filter_list</i>
-            </a>
-          </li>
-
-          <li>
-            <a className="waves-effect waves-light btn-small z-depth-0 grey darken-2">
-              <i className="material-icons right">border_outer</i>Border
-            </a>
-          </li>
-
-          <li>
-            <a className="waves-effect waves-light btn-small z-depth-0 grey darken-2">
-              <i className="material-icons right">volume_up</i>Music
-            </a>
-          </li>
-
-          <li>
-            <a className="waves-effect waves-light btn-small z-depth-0 grey darken-2">
-              <i className="material-icons right">volume_off</i>sounds
-            </a>
-          </li>
-
-          <li>
-            <a className="waves-effect waves-light btn-floating z-depth-0 grey darken-2">
-              <i className="pause material-icons">pause</i>
-            </a>
-            {/* play_arrow */}
-          </li>
-        </ul>
-      </div>
+      <ul id="nav-mobile" className="right">
+        <li>
+          <Dropdown
+            label={'Level'}
+            icon={levelIcon}
+            values={levelsList}
+            handler={setLevel}
+          />
+        </li>
+        <li>
+          <Button
+            label={'Border'}
+            icon={borderIcon}
+            value={gameBorder}
+            handler={turnOnOffBorder}
+          />
+        </li>
+        <li>
+          <Button
+            label={'Music'}
+            icon={volumeIcon}
+            value={musicOn}
+            handler={turnOnOffMusic}
+          />
+        </li>
+        <li>
+          <Button
+            label={'Sounds'}
+            icon={volumeIcon}
+            value={soundOn}
+            handler={turnOnOffSound}
+          />
+        </li>
+        <li>
+          <Button
+            icon={playPauseIcon}
+            btnType={'floating'}
+            value={isPlaying}
+            handler={playGame}
+          />
+        </li>
+      </ul>
     </nav>
   );
 };
+
+const mapStateToProps = (store) => ({
+  game: store.game,
+  settings: store.settings,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  playGame: () => dispatch(playGame()),
+  setLevel: (level) => dispatch(setLevel(level)),
+  turnOnOffMusic: () => dispatch(turnOnOffMusic()),
+  turnOnOffSound: () => dispatch(turnOnOffSound()),
+  turnOnOffBorder: () => dispatch(turnOnOffBorder()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
