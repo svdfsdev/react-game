@@ -1,11 +1,10 @@
-import { PLAY_GAME, RESET_USER, SET_USER } from '../actions/actionsTypes';
+import { PLAY_GAME, SET_FULL_SCREEN } from '../actions/actionsTypes';
 
 const initialState = {
   name: 'Guest',
   email: 'none',
   isLogin: false,
-
-  isPlaying: false,
+  isFullScreen: false,
   score: 0,
   duration: 0,
   steps: [],
@@ -17,6 +16,12 @@ export function gameReducer(state = initialState, action) {
       return {
         ...state,
         isPlaying: !state.isPlaying,
+      };
+
+    case SET_FULL_SCREEN:
+      return {
+        ...state,
+        isFullScreen: !state.isFullScreen,
       };
 
     default:

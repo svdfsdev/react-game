@@ -1,4 +1,3 @@
-import { levelsList } from '../utils/guide';
 import {
   SET_BORDER,
   SET_LEVEL,

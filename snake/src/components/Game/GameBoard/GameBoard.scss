@@ -1,0 +1,23 @@
+.GameBoard {
+  position: relative;
+  width: 750px;
+  height: 450px;
+  margin: 0 auto;
+  background: lightskyblue;
+
+  .prey {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: greenyellow;
+    transition: 500ms;
+  }
+
+  .snake {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: lightsalmon;
+    transition: 100ms;
+  }
+}

@@ -12,13 +12,10 @@ import App from './App';
 // sidenav
 // materialboxed
 // tooltipped
-// select
 
 document.addEventListener('DOMContentLoaded', function () {
-  var select = document.querySelectorAll('select');
-  var selectInstances = M.FormSelect.init(select, {});
-
   var dropdown = document.querySelectorAll('.dropdown-trigger');
+  // eslint-disable-next-line
   var dropdownInstances = M.Dropdown.init(dropdown, {});
 });
 

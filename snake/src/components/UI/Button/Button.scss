@@ -1,4 +1,20 @@
 .Button {
+  transition: 1s;
+
+  &:hover {
+    transition: 0.5s;
+    background: #838383 !important;
+  }
+
+  &.green:hover {
+    transition: 0.5s;
+    background: #4caf4fb0 !important;
+  }
+
+  &.red:hover {
+    transition: 0.5s;
+    background: #f44336c7 !important;
+  }
 }
 
 #nav-mobile > li > a {
