@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { getRandomNumber } from '../../../utils/helper';
 import './GameBoard.scss';
+import {
+  DIRECTION_DOWN,
+  DIRECTION_LEFT,
+  DIRECTION_RIGHT,
+  DIRECTION_UP,
+} from '../../../utils/guide';
+import { getRandomNumber } from '../../../utils/helper';
 
 export const GameBoard = ({ handler }) => {
   const [prey, setPrey] = useState({
@@ -10,10 +16,10 @@ export const GameBoard = ({ handler }) => {
   const [finSnake, setFinSnake] = useState(null);
   const [snakeHeadX, setSnakeHeadX] = useState(0);
   const [snakeHeadY, setSnakeHeadY] = useState(225);
-  const [direction, setDirection] = useState(39);
+  const [direction, setDirection] = useState(DIRECTION_RIGHT);
 
   const snake = useMemo(() => {
-    return new Array(1).fill('');
+    return [];
   }, []);
 
   const renderSnake = useCallback(() => {
@@ -29,31 +35,35 @@ export const GameBoard = ({ handler }) => {
     ));
   }, [snake]);
 
-  const moveTo = useCallback(() => {
+  const changeSnakeHeadPosition = useCallback(() => {
     switch (direction) {
-      case 37:
+      case DIRECTION_LEFT:
         setSnakeHeadX((prev) => prev - 25);
         break;
 
-      case 38:
+      case DIRECTION_UP:
         setSnakeHeadY((prev) => prev - 25);
         break;
 
-      case 39:
+      case DIRECTION_RIGHT:
         setSnakeHeadX((prev) => prev + 25);
         break;
 
-      case 40:
+      case DIRECTION_DOWN:
         setSnakeHeadY((prev) => prev + 25);
         break;
 
       default:
         break;
     }
+  }, [direction]);
 
+  const changeSnakeHead = useCallback(() => {
     snake.pop();
     snake.unshift({ x: snakeHeadX, y: snakeHeadY });
+  }, [snake, snakeHeadX, snakeHeadY]);
 
+  const eatPrey = useCallback(() => {
     if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
       handler();
       snake.unshift({ x: snakeHeadX, y: snakeHeadY });
@@ -62,28 +72,30 @@ export const GameBoard = ({ handler }) => {
         y: getRandomNumber(18, 25),
       });
     }
+  }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, handler]);
 
-    const resSnake = renderSnake();
-    setFinSnake(resSnake);
+  const drawGame = useCallback(() => {
+    changeSnakeHeadPosition();
+    changeSnakeHead();
+
+    eatPrey();
+
+    setFinSnake(renderSnake());
   }, [
-    snake,
-    prey.x,
-    prey.y,
-    handler,
-    direction,
-    snakeHeadX,
-    snakeHeadY,
+    eatPrey,
     renderSnake,
     setFinSnake,
+    changeSnakeHead,
+    changeSnakeHeadPosition,
   ]);
 
   const changeDirection = useCallback(
     (e) => {
       if (
-        (e.keyCode === 37 && direction === 39) ||
-        (e.keyCode === 39 && direction === 37) ||
-        (e.keyCode === 38 && direction === 40) ||
-        (e.keyCode === 40 && direction === 38)
+        (e.keyCode === DIRECTION_LEFT && direction === DIRECTION_RIGHT) ||
+        (e.keyCode === DIRECTION_RIGHT && direction === DIRECTION_LEFT) ||
+        (e.keyCode === DIRECTION_UP && direction === DIRECTION_DOWN) ||
+        (e.keyCode === DIRECTION_DOWN && direction === DIRECTION_UP)
       )
         return;
 
@@ -93,17 +105,17 @@ export const GameBoard = ({ handler }) => {
   );
 
   useEffect(() => {
-    const draw = setInterval(() => {
-      moveTo(direction);
-    }, 80);
+    const game = setInterval(() => {
+      drawGame(direction);
+    }, 100);
 
     document.addEventListener('keydown', changeDirection);
 
     return () => {
-      clearInterval(draw);
+      clearInterval(game);
       document.removeEventListener('keydown', changeDirection);
     };
-  }, [snakeHeadX, snakeHeadY, direction, moveTo, changeDirection]);
+  }, [snakeHeadX, snakeHeadY, direction, drawGame, changeDirection]);
 
   return (
     <div className="GameBoard">
