@@ -5,7 +5,7 @@ import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 
 const Game = () => {
-  const [score, setScore] = useState(11);
+  const [score, setScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 

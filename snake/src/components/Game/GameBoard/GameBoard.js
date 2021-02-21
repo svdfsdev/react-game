@@ -2,24 +2,21 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { getRandomNumber } from '../../../utils/helper';
 import './GameBoard.scss';
 
-export const GameBoard = ({ score }) => {
+export const GameBoard = ({ handler }) => {
+  const [prey, setPrey] = useState({
+    x: getRandomNumber(30, 25),
+    y: getRandomNumber(18, 25),
+  });
   const [finSnake, setFinSnake] = useState(null);
   const [snakeHeadX, setSnakeHeadX] = useState(0);
   const [snakeHeadY, setSnakeHeadY] = useState(225);
   const [direction, setDirection] = useState(39);
 
-  const prey = useMemo(
-    () => ({ x: getRandomNumber(30, 25), y: getRandomNumber(18, 25) }),
-    []
-  );
-
   const snake = useMemo(() => {
-    return new Array(score + 1).fill('');
-  }, [score]);
+    return new Array(1).fill('');
+  }, []);
 
   const renderSnake = useCallback(() => {
-    snake.unshift({ x: snakeHeadX, y: snakeHeadY });
-
     return snake.map((it, i) => (
       <div
         key={i}
@@ -30,11 +27,9 @@ export const GameBoard = ({ score }) => {
         }}
       ></div>
     ));
-  }, [snake, snakeHeadX, snakeHeadY]);
+  }, [snake]);
 
   const moveTo = useCallback(() => {
-    snake.pop();
-
     switch (direction) {
       case 37:
         setSnakeHeadX((prev) => prev - 25);
@@ -56,9 +51,31 @@ export const GameBoard = ({ score }) => {
         break;
     }
 
+    snake.pop();
+    snake.unshift({ x: snakeHeadX, y: snakeHeadY });
+
+    if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
+      handler();
+      snake.unshift({ x: snakeHeadX, y: snakeHeadY });
+      setPrey({
+        x: getRandomNumber(30, 25),
+        y: getRandomNumber(18, 25),
+      });
+    }
+
     const resSnake = renderSnake();
     setFinSnake(resSnake);
-  }, [direction, snake, renderSnake]);
+  }, [
+    snake,
+    prey.x,
+    prey.y,
+    handler,
+    direction,
+    snakeHeadX,
+    snakeHeadY,
+    renderSnake,
+    setFinSnake,
+  ]);
 
   const changeDirection = useCallback(
     (e) => {
@@ -78,7 +95,7 @@ export const GameBoard = ({ score }) => {
   useEffect(() => {
     const draw = setInterval(() => {
       moveTo(direction);
-    }, 100);
+    }, 80);
 
     document.addEventListener('keydown', changeDirection);
 
@@ -86,7 +103,7 @@ export const GameBoard = ({ score }) => {
       clearInterval(draw);
       document.removeEventListener('keydown', changeDirection);
     };
-  }, [score, snakeHeadX, snakeHeadY, direction, moveTo, changeDirection]);
+  }, [snakeHeadX, snakeHeadY, direction, moveTo, changeDirection]);
 
   return (
     <div className="GameBoard">
