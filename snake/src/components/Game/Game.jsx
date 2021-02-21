@@ -30,7 +30,8 @@ const Game = (props) => {
         score={score}
         isPlaying={isPlaying}
         level={gameLevel.value}
-        handler={increaseScore}
+        scoreHandler={increaseScore}
+        startStopHandler={startStopGame}
       />
 
       <Controls

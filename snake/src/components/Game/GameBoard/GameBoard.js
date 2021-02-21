@@ -5,10 +5,16 @@ import {
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
   DIRECTION_UP,
+  START_STOP_GAME,
 } from '../../../utils/guide';
 import { getRandomNumber } from '../../../utils/helper';
 
-export const GameBoard = ({ level, isPlaying, handler }) => {
+export const GameBoard = ({
+  level,
+  isPlaying,
+  scoreHandler,
+  startStopHandler,
+}) => {
   const [prey, setPrey] = useState({
     x: getRandomNumber(30, 25),
     y: getRandomNumber(18, 25),
@@ -65,14 +71,14 @@ export const GameBoard = ({ level, isPlaying, handler }) => {
 
   const eatPrey = useCallback(() => {
     if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
-      handler();
+      scoreHandler();
       snake.unshift({ x: snakeHeadX, y: snakeHeadY });
       setPrey({
         x: getRandomNumber(30, 25),
         y: getRandomNumber(18, 25),
       });
     }
-  }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, handler]);
+  }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
 
   const drawGame = useCallback(() => {
     changeSnakeHeadPosition();
@@ -91,6 +97,11 @@ export const GameBoard = ({ level, isPlaying, handler }) => {
 
   const changeDirection = useCallback(
     (e) => {
+      if (e.keyCode === START_STOP_GAME) {
+        startStopHandler();
+        return;
+      }
+
       if (
         (e.keyCode === DIRECTION_LEFT && direction === DIRECTION_RIGHT) ||
         (e.keyCode === DIRECTION_RIGHT && direction === DIRECTION_LEFT) ||
@@ -101,7 +112,7 @@ export const GameBoard = ({ level, isPlaying, handler }) => {
 
       setDirection(e.keyCode);
     },
-    [direction]
+    [direction, startStopHandler]
   );
 
   useEffect(() => {
