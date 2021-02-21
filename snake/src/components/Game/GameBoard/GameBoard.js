@@ -8,13 +8,13 @@ import {
 } from '../../../utils/guide';
 import { getRandomNumber } from '../../../utils/helper';
 
-export const GameBoard = ({ handler }) => {
+export const GameBoard = ({ level, isPlaying, handler }) => {
   const [prey, setPrey] = useState({
     x: getRandomNumber(30, 25),
     y: getRandomNumber(18, 25),
   });
   const [finSnake, setFinSnake] = useState(null);
-  const [snakeHeadX, setSnakeHeadX] = useState(0);
+  const [snakeHeadX, setSnakeHeadX] = useState(375);
   const [snakeHeadY, setSnakeHeadY] = useState(225);
   const [direction, setDirection] = useState(DIRECTION_RIGHT);
 
@@ -105,9 +105,13 @@ export const GameBoard = ({ handler }) => {
   );
 
   useEffect(() => {
-    const game = setInterval(() => {
-      drawGame(direction);
-    }, 100);
+    let game = null;
+
+    if (isPlaying) {
+      game = setInterval(() => {
+        drawGame(direction);
+      }, level);
+    } else clearInterval(game);
 
     document.addEventListener('keydown', changeDirection);
 
@@ -115,7 +119,16 @@ export const GameBoard = ({ handler }) => {
       clearInterval(game);
       document.removeEventListener('keydown', changeDirection);
     };
-  }, [snakeHeadX, snakeHeadY, direction, drawGame, changeDirection]);
+  }, [
+    level,
+    isPlaying,
+    snakeHeadX,
+    snakeHeadY,
+    direction,
+    drawGame,
+    renderSnake,
+    changeDirection,
+  ]);
 
   return (
     <div className="GameBoard">

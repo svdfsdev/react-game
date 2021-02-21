@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import './Game.scss';
 import { Progress } from './Progress/Progress';
 import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 
-const Game = () => {
+const Game = (props) => {
   const [score, setScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const { gameLevel } = props.settings;
 
   const startStopGame = () => {
     setIsPlaying((prev) => !prev);
@@ -23,7 +26,12 @@ const Game = () => {
     <div className="Game">
       <Progress score={score} time={'00:00'} />
 
-      <GameBoard score={score} handler={increaseScore} />
+      <GameBoard
+        score={score}
+        isPlaying={isPlaying}
+        level={gameLevel.value}
+        handler={increaseScore}
+      />
 
       <Controls
         isPlaying={isPlaying}
@@ -35,4 +43,8 @@ const Game = () => {
   );
 };
 
-export default Game;
+const mapStateToProps = (store) => ({
+  settings: store.settings,
+});
+
+export default connect(mapStateToProps)(Game);

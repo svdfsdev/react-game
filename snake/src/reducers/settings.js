@@ -1,4 +1,9 @@
-import { SET_BORDER, SET_LEVEL, SET_MUSIC_ON_OFF, SET_SOUND_ON_OFF } from '../actions/actionsTypes';
+import {
+  SET_BORDER,
+  SET_LEVEL,
+  SET_MUSIC_ON_OFF,
+  SET_SOUND_ON_OFF,
+} from '../actions/actionsTypes';
 
 const initialState = {
   musicOn: true,
@@ -10,7 +15,7 @@ const initialState = {
   gameBorder: false,
   gameBoard: ['Lawn', 'Sand', 'Water'],
   gamePrey: ['Apple', 'Carrot', 'Coffee', 'Beer', 'Ice cream'],
-  gameLevel: [{ easy: 300 }, { medium: 200 }, { hard: 100 }],
+  gameLevel: { label: 'Easy', value: 125 },
 };
 
 export function settingsReducer(state = initialState, action) {

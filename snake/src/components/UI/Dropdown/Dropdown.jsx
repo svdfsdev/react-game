@@ -3,7 +3,7 @@ import React from 'react';
 export const Dropdown = ({ label, icon, values, handler }) => {
   const listValues = values.map((it, i) => (
     <li key={i}>
-      <a href="!#" className="white-text" onClick={() => handler(it.value)}>
+      <a href="!#" className="white-text" onClick={() => handler(it)}>
         {it.label}
       </a>
     </li>

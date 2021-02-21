@@ -12,7 +12,7 @@ import { levelIcon, volumeIcon, borderIcon } from '../../utils/icons';
 import { levelsList } from '../../utils/guide';
 
 const Navbar = (props) => {
-  const { musicOn, soundOn, gameBorder } = props.settings;
+  const { musicOn, soundOn, gameBorder, gameLevel } = props.settings;
   const { setLevel, turnOnOffMusic, turnOnOffSound, turnOnOffBorder } = props;
 
   return (
@@ -20,7 +20,7 @@ const Navbar = (props) => {
       <ul id="nav-mobile" className="right">
         <li className="navbar-item">
           <Dropdown
-            label={'Level'}
+            label={gameLevel.label}
             icon={levelIcon}
             values={levelsList}
             handler={setLevel}
