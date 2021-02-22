@@ -5,20 +5,4 @@
   margin: 0 auto;
   background: lightskyblue;
   overflow: hidden;
-
-  .prey {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    background: greenyellow;
-    transition: 250ms;
-  }
-
-  .snake {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    background: lightsalmon;
-    // transition: 100ms;
-  }
 }

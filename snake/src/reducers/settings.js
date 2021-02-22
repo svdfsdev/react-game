@@ -15,7 +15,7 @@ const initialState = {
   gameBorder: false,
   gameBoard: ['Lawn', 'Sand', 'Water'],
   gamePrey: ['Apple', 'Carrot', 'Coffee', 'Beer', 'Ice cream'],
-  gameLevel: { label: 'Easy', value: 125 },
+  gameLevel: { label: 'Easy', value: 80 },
 };
 
 export function settingsReducer(state = initialState, action) {

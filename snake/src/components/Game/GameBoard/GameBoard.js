@@ -10,6 +10,8 @@ import {
   TOP_BORDER,
 } from '../../../utils/guide';
 import { getRandomNumber } from '../../../utils/helper';
+import { Prey } from './Prey/Prey';
+import { Snake } from './Snake/Snake';
 
 export const GameBoard = ({
   level,
@@ -22,27 +24,15 @@ export const GameBoard = ({
     x: getRandomNumber(30, 25),
     y: getRandomNumber(18, 25),
   });
-  const [finSnake, setFinSnake] = useState(null);
   const [snakeHeadX, setSnakeHeadX] = useState(375);
   const [snakeHeadY, setSnakeHeadY] = useState(225);
+  const [isDirectionChanged, setIsDirectionChanged] = useState(false);
+
   const [direction, setDirection] = useState(DIRECTION_RIGHT);
 
-  const snake = useMemo(() => {
-    return [];
+  const snakePositions = useMemo(() => {
+    return [{ x: 375, y: 225 }];
   }, []);
-
-  const renderSnake = useCallback(() => {
-    return snake.map((it, i) => (
-      <div
-        key={i}
-        className="snake"
-        style={{
-          left: `${it.x}px`,
-          top: `${it.y}px`,
-        }}
-      ></div>
-    ));
-  }, [snake]);
 
   const changeSnakeHeadPosition = useCallback(() => {
     switch (direction) {
@@ -68,9 +58,9 @@ export const GameBoard = ({
   }, [direction]);
 
   const changeSnakeHead = useCallback(() => {
-    snake.pop();
-    snake.unshift({ x: snakeHeadX, y: snakeHeadY });
-  }, [snake, snakeHeadX, snakeHeadY]);
+    snakePositions.pop();
+    snakePositions.unshift({ x: snakeHeadX, y: snakeHeadY });
+  }, [snakePositions, snakeHeadX, snakeHeadY]);
 
   const finishGame = useCallback(() => {
     if (
@@ -105,41 +95,42 @@ export const GameBoard = ({
   const eatPrey = useCallback(() => {
     if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
       scoreHandler();
-      snake.unshift({ x: snakeHeadX, y: snakeHeadY });
+      snakePositions.unshift({ x: snakeHeadX, y: snakeHeadY });
       setPrey({
         x: getRandomNumber(30, 25),
         y: getRandomNumber(18, 25),
       });
     }
-  }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
+  }, [snakePositions, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
 
   const eatYourself = useCallback(() => {
-    for (let i = snake.length - 1; i >= 1; i--) {
-      if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+    for (let i = snakePositions.length - 1; i >= 1; i--) {
+      if (
+        snakePositions[0].x === snakePositions[i].x &&
+        snakePositions[0].y === snakePositions[i].y
+      ) {
         startStopHandler();
       }
     }
-  }, [snake, startStopHandler]);
+  }, [snakePositions, startStopHandler]);
 
   const drawGame = useCallback(() => {
     changeSnakeHeadPosition();
     changeSnakeHead();
 
-    if (snake.length > 3) eatYourself();
+    if (snakePositions.length > 3) eatYourself();
 
     border ? finishGame() : crossBorder();
     eatPrey();
 
-    setFinSnake(renderSnake());
+    setIsDirectionChanged(false);
   }, [
     border,
-    snake.length,
+    snakePositions.length,
     eatPrey,
-    eatYourself,
     finishGame,
+    eatYourself,
     crossBorder,
-    renderSnake,
-    setFinSnake,
     changeSnakeHead,
     changeSnakeHeadPosition,
   ]);
@@ -151,17 +142,20 @@ export const GameBoard = ({
         return;
       }
 
+      if (isDirectionChanged) return;
+
       if (
-        (e.keyCode === DIRECTION_LEFT && direction === DIRECTION_RIGHT) ||
         (e.keyCode === DIRECTION_RIGHT && direction === DIRECTION_LEFT) ||
-        (e.keyCode === DIRECTION_UP && direction === DIRECTION_DOWN) ||
-        (e.keyCode === DIRECTION_DOWN && direction === DIRECTION_UP)
+        (e.keyCode === DIRECTION_LEFT && direction === DIRECTION_RIGHT) ||
+        (e.keyCode === DIRECTION_DOWN && direction === DIRECTION_UP) ||
+        (e.keyCode === DIRECTION_UP && direction === DIRECTION_DOWN)
       )
         return;
 
       setDirection(e.keyCode);
+      setIsDirectionChanged(true);
     },
-    [direction, startStopHandler]
+    [direction, startStopHandler, isDirectionChanged]
   );
 
   useEffect(() => {
@@ -186,17 +180,13 @@ export const GameBoard = ({
     snakeHeadY,
     direction,
     drawGame,
-    renderSnake,
     changeDirection,
   ]);
 
   return (
     <div className="GameBoard">
-      <div
-        className="prey"
-        style={{ left: `${prey.x}px`, top: `${prey.y}px` }}
-      ></div>
-      {finSnake}
+      <Prey x={prey.x} y={prey.y} />
+      <Snake snake={snakePositions} />
     </div>
   );
 };

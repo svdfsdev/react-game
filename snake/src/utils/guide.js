@@ -1,7 +1,7 @@
 export const levelsList = [
-  { label: 'Easy', value: 125 },
-  { label: 'Medium', value: 100 },
-  { label: 'Hard', value: 75 },
+  { label: 'Easy', value: 100 },
+  { label: 'Medium', value: 80 },
+  { label: 'Hard', value: 60 },
 ];
 
 export const DIRECTION_UP = 38;
