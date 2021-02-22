@@ -24,7 +24,7 @@ const Game = (props) => {
 
   return (
     <div className="Game">
-      <Progress score={score} time={'00:00'} />
+      <Progress score={score} isPlaying={isPlaying} />
 
       <GameBoard
         score={score}
