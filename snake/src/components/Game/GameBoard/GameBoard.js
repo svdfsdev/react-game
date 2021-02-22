@@ -5,12 +5,15 @@ import {
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
   DIRECTION_UP,
+  LEFT_BORDER,
   START_STOP_GAME,
+  TOP_BORDER,
 } from '../../../utils/guide';
 import { getRandomNumber } from '../../../utils/helper';
 
 export const GameBoard = ({
   level,
+  border,
   isPlaying,
   scoreHandler,
   startStopHandler,
@@ -69,6 +72,34 @@ export const GameBoard = ({
     snake.unshift({ x: snakeHeadX, y: snakeHeadY });
   }, [snake, snakeHeadX, snakeHeadY]);
 
+  const crossBorder = useCallback(() => {
+    if (border) {
+      if (
+        snakeHeadX === LEFT_BORDER - 25 ||
+        snakeHeadY === TOP_BORDER - 25 ||
+        snakeHeadX === 750 + 25 ||
+        snakeHeadY === 450 + 25
+      ) {
+        startStopHandler();
+      }
+    }
+
+    if (!border) {
+      if (snakeHeadX === LEFT_BORDER - 25) {
+        setSnakeHeadX(750);
+      }
+      if (snakeHeadX === 750 + 25) {
+        setSnakeHeadX(LEFT_BORDER);
+      }
+      if (snakeHeadY === TOP_BORDER - 25) {
+        setSnakeHeadY(450);
+      }
+      if (snakeHeadY === 450 + 25) {
+        setSnakeHeadY(TOP_BORDER);
+      }
+    }
+  }, [snakeHeadX, snakeHeadY, border, startStopHandler]);
+
   const eatPrey = useCallback(() => {
     if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
       scoreHandler();
@@ -84,11 +115,13 @@ export const GameBoard = ({
     changeSnakeHeadPosition();
     changeSnakeHead();
 
+    crossBorder();
     eatPrey();
 
     setFinSnake(renderSnake());
   }, [
     eatPrey,
+    crossBorder,
     renderSnake,
     setFinSnake,
     changeSnakeHead,

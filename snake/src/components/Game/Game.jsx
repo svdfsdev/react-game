@@ -10,7 +10,7 @@ const Game = (props) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const { gameLevel } = props.settings;
+  const { gameLevel, gameBorder } = props.settings;
 
   const startStopGame = () => {
     setIsPlaying((prev) => !prev);
@@ -30,6 +30,7 @@ const Game = (props) => {
         score={score}
         isPlaying={isPlaying}
         level={gameLevel.value}
+        border={gameBorder}
         scoreHandler={increaseScore}
         startStopHandler={startStopGame}
       />

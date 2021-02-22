@@ -10,3 +10,6 @@ export const DIRECTION_LEFT = 37;
 export const DIRECTION_RIGHT = 39;
 
 export const START_STOP_GAME = 32;
+
+export const LEFT_BORDER = 0;
+export const TOP_BORDER = 0;
