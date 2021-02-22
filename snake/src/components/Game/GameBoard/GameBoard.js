@@ -72,33 +72,35 @@ export const GameBoard = ({
     snake.unshift({ x: snakeHeadX, y: snakeHeadY });
   }, [snake, snakeHeadX, snakeHeadY]);
 
-  const crossBorder = useCallback(() => {
-    if (border) {
-      if (
-        snakeHeadX === LEFT_BORDER - 25 ||
-        snakeHeadY === TOP_BORDER - 25 ||
-        snakeHeadX === 750 + 25 ||
-        snakeHeadY === 450 + 25
-      ) {
-        startStopHandler();
-      }
+  const finishGame = useCallback(() => {
+    if (
+      snakeHeadX === LEFT_BORDER - 25 ||
+      snakeHeadY === TOP_BORDER - 25 ||
+      snakeHeadX === 750 + 25 ||
+      snakeHeadY === 450 + 25
+    ) {
+      startStopHandler();
     }
+  }, [snakeHeadX, snakeHeadY, startStopHandler]);
 
-    if (!border) {
-      if (snakeHeadX === LEFT_BORDER - 25) {
-        setSnakeHeadX(750);
-      }
-      if (snakeHeadX === 750 + 25) {
-        setSnakeHeadX(LEFT_BORDER);
-      }
-      if (snakeHeadY === TOP_BORDER - 25) {
-        setSnakeHeadY(450);
-      }
-      if (snakeHeadY === 450 + 25) {
-        setSnakeHeadY(TOP_BORDER);
-      }
+  const crossBorder = useCallback(() => {
+    if (snakeHeadX === LEFT_BORDER - 25) {
+      setSnakeHeadX(750);
+      return;
     }
-  }, [snakeHeadX, snakeHeadY, border, startStopHandler]);
+    if (snakeHeadX === 750 + 25) {
+      setSnakeHeadX(LEFT_BORDER);
+      return;
+    }
+    if (snakeHeadY === TOP_BORDER - 25) {
+      setSnakeHeadY(450);
+      return;
+    }
+    if (snakeHeadY === 450 + 25) {
+      setSnakeHeadY(TOP_BORDER);
+      return;
+    }
+  }, [snakeHeadX, snakeHeadY]);
 
   const eatPrey = useCallback(() => {
     if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
@@ -111,16 +113,30 @@ export const GameBoard = ({
     }
   }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
 
+  const eatYourself = useCallback(() => {
+    for (let i = snake.length - 1; i >= 1; i--) {
+      if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+        startStopHandler();
+      }
+    }
+  }, [snake, startStopHandler]);
+
   const drawGame = useCallback(() => {
     changeSnakeHeadPosition();
     changeSnakeHead();
 
-    crossBorder();
+    if (snake.length > 3) eatYourself();
+
+    border ? finishGame() : crossBorder();
     eatPrey();
 
     setFinSnake(renderSnake());
   }, [
+    border,
+    snake.length,
     eatPrey,
+    eatYourself,
+    finishGame,
     crossBorder,
     renderSnake,
     setFinSnake,
