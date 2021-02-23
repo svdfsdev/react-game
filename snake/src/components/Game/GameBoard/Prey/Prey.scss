@@ -1,7 +1,10 @@
 .Prey {
   position: absolute;
-  width: 25px;
-  height: 25px;
-  background: greenyellow;
+  width: 35px;
+  height: 35px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url(../../../../assets/img/carrot.png);
   transition: 250ms;
 }

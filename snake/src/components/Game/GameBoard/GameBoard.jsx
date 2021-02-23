@@ -5,12 +5,18 @@ import {
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
   DIRECTION_UP,
+  GAMEBOARD_HEIGHT,
+  GAMEBOARD_WIDTH,
   LEFT_BORDER,
   START_STOP_GAME,
   TOP_BORDER,
 } from '../../../utils/guide';
 import { getRandomNumber } from '../../../utils/helper';
 import { Prey } from './Prey/Prey';
+
+const BOTTOM_BORDER = 450;
+const RIGHT_BORDER = 750;
+const BOX = 25;
 
 export const GameBoard = ({
   level,
@@ -20,35 +26,34 @@ export const GameBoard = ({
   startStopHandler,
 }) => {
   const [prey, setPrey] = useState({
-    x: getRandomNumber(30, 25),
-    y: getRandomNumber(18, 25),
+    x: getRandomNumber(GAMEBOARD_WIDTH, BOX),
+    y: getRandomNumber(GAMEBOARD_HEIGHT, BOX),
   });
-  const [snakeHeadX, setSnakeHeadX] = useState(375);
-  const [snakeHeadY, setSnakeHeadY] = useState(225);
+  const [snakeHeadX, setSnakeHeadX] = useState(RIGHT_BORDER / 2);
+  const [snakeHeadY, setSnakeHeadY] = useState(BOTTOM_BORDER / 2);
+  const [direction, setDirection] = useState(DIRECTION_RIGHT);
   const [isDirectionChanged, setIsDirectionChanged] = useState(false);
 
-  const [direction, setDirection] = useState(DIRECTION_RIGHT);
-
   const snakePositions = useMemo(() => {
-    return [{ x: 375, y: 225 }];
+    return [{ x: RIGHT_BORDER / 2, y: BOTTOM_BORDER / 2 }];
   }, []);
 
   const changeSnakeHeadPosition = useCallback(() => {
     switch (direction) {
       case DIRECTION_LEFT:
-        setSnakeHeadX((prev) => prev - 25);
+        setSnakeHeadX((prev) => prev - BOX);
         return;
 
       case DIRECTION_UP:
-        setSnakeHeadY((prev) => prev - 25);
+        setSnakeHeadY((prev) => prev - BOX);
         return;
 
       case DIRECTION_RIGHT:
-        setSnakeHeadX((prev) => prev + 25);
+        setSnakeHeadX((prev) => prev + BOX);
         return;
 
       case DIRECTION_DOWN:
-        setSnakeHeadY((prev) => prev + 25);
+        setSnakeHeadY((prev) => prev + BOX);
         return;
 
       default:
@@ -63,10 +68,10 @@ export const GameBoard = ({
 
   const finishGame = useCallback(() => {
     if (
-      snakeHeadX === LEFT_BORDER - 25 ||
-      snakeHeadY === TOP_BORDER - 25 ||
-      snakeHeadX === 750 + 25 ||
-      snakeHeadY === 450 + 25
+      snakeHeadX === LEFT_BORDER - BOX ||
+      snakeHeadY === TOP_BORDER - BOX ||
+      snakeHeadX === RIGHT_BORDER + BOX ||
+      snakeHeadY === BOTTOM_BORDER + BOX
     ) {
       startStopHandler();
     }
@@ -77,14 +82,17 @@ export const GameBoard = ({
       setSnakeHeadX(750);
       return;
     }
+
     if (snakeHeadX > 750) {
       setSnakeHeadX(LEFT_BORDER);
       return;
     }
-    if (snakeHeadY < TOP_BORDER - 25) {
+
+    if (snakeHeadY < TOP_BORDER - BOX) {
       setSnakeHeadY(450);
       return;
     }
+
     if (snakeHeadY > 450) {
       setSnakeHeadY(TOP_BORDER);
       return;
@@ -94,10 +102,12 @@ export const GameBoard = ({
   const eatPrey = useCallback(() => {
     if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
       scoreHandler();
+
       snakePositions.unshift({ x: snakeHeadX, y: snakeHeadY });
+
       setPrey({
-        x: getRandomNumber(30, 25),
-        y: getRandomNumber(18, 25),
+        x: getRandomNumber(GAMEBOARD_WIDTH, BOX),
+        y: getRandomNumber(GAMEBOARD_HEIGHT, BOX),
       });
     }
   }, [snakePositions, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
@@ -164,7 +174,7 @@ export const GameBoard = ({
       setDirection(e.keyCode);
       if (isPlaying) setIsDirectionChanged(true);
     },
-    [direction, startStopHandler, isDirectionChanged]
+    [isPlaying, direction, startStopHandler, isDirectionChanged]
   );
 
   useEffect(() => {
@@ -209,6 +219,7 @@ export const GameBoard = ({
 
   return (
     <div className="GameBoard">
+      <div className="background lawn"></div>
       <Prey x={prey.x} y={prey.y} />
 
       {renderSnake()}
