@@ -1,6 +1,6 @@
 export const levelsList = [
-  { label: 'Easy', value: 100 },
-  { label: 'Medium', value: 80 },
+  { label: 'Easy', value: 90 },
+  { label: 'Medium', value: 75 },
   { label: 'Hard', value: 60 },
 ];
 

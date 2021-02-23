@@ -5,4 +5,12 @@
   margin: 0 auto;
   background: lightskyblue;
   overflow: hidden;
+
+  .Snake {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: olivedrab;
+    transition: 10ms;
+  }
 }

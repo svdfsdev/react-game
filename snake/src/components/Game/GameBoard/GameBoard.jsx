@@ -11,7 +11,6 @@ import {
 } from '../../../utils/guide';
 import { getRandomNumber } from '../../../utils/helper';
 import { Prey } from './Prey/Prey';
-import { Snake } from './Snake/Snake';
 
 export const GameBoard = ({
   level,
@@ -38,22 +37,22 @@ export const GameBoard = ({
     switch (direction) {
       case DIRECTION_LEFT:
         setSnakeHeadX((prev) => prev - 25);
-        break;
+        return;
 
       case DIRECTION_UP:
         setSnakeHeadY((prev) => prev - 25);
-        break;
+        return;
 
       case DIRECTION_RIGHT:
         setSnakeHeadX((prev) => prev + 25);
-        break;
+        return;
 
       case DIRECTION_DOWN:
         setSnakeHeadY((prev) => prev + 25);
-        break;
+        return;
 
       default:
-        break;
+        return;
     }
   }, [direction]);
 
@@ -74,19 +73,19 @@ export const GameBoard = ({
   }, [snakeHeadX, snakeHeadY, startStopHandler]);
 
   const crossBorder = useCallback(() => {
-    if (snakeHeadX === LEFT_BORDER - 25) {
+    if (snakeHeadX < LEFT_BORDER) {
       setSnakeHeadX(750);
       return;
     }
-    if (snakeHeadX === 750 + 25) {
+    if (snakeHeadX > 750) {
       setSnakeHeadX(LEFT_BORDER);
       return;
     }
-    if (snakeHeadY === TOP_BORDER - 25) {
+    if (snakeHeadY < TOP_BORDER - 25) {
       setSnakeHeadY(450);
       return;
     }
-    if (snakeHeadY === 450 + 25) {
+    if (snakeHeadY > 450) {
       setSnakeHeadY(TOP_BORDER);
       return;
     }
@@ -137,12 +136,22 @@ export const GameBoard = ({
 
   const changeDirection = useCallback(
     (e) => {
-      if (e.keyCode === START_STOP_GAME) {
-        startStopHandler();
-        return;
-      }
-
       if (isDirectionChanged) return;
+
+      switch (e.keyCode) {
+        case START_STOP_GAME:
+          startStopHandler();
+          return;
+
+        case DIRECTION_RIGHT:
+        case DIRECTION_LEFT:
+        case DIRECTION_DOWN:
+        case DIRECTION_UP:
+          break;
+
+        default:
+          return;
+      }
 
       if (
         (e.keyCode === DIRECTION_RIGHT && direction === DIRECTION_LEFT) ||
@@ -153,7 +162,7 @@ export const GameBoard = ({
         return;
 
       setDirection(e.keyCode);
-      setIsDirectionChanged(true);
+      if (isPlaying) setIsDirectionChanged(true);
     },
     [direction, startStopHandler, isDirectionChanged]
   );
@@ -183,10 +192,26 @@ export const GameBoard = ({
     changeDirection,
   ]);
 
+  const renderSnake = useCallback(
+    () =>
+      snakePositions.map((it, i) => (
+        <div
+          key={i}
+          className="Snake"
+          style={{
+            left: `${it.x}px`,
+            top: `${it.y}px`,
+          }}
+        ></div>
+      )),
+    [snakePositions]
+  );
+
   return (
     <div className="GameBoard">
       <Prey x={prey.x} y={prey.y} />
-      <Snake snake={snakePositions} />
+
+      {renderSnake()}
     </div>
   );
 };

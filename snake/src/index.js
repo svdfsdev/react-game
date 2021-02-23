@@ -14,9 +14,11 @@ import App from './App';
 // tooltipped
 
 document.addEventListener('DOMContentLoaded', function () {
+  // var fullScreen = document.querySelectorAll('.materialboxed'); //materialboxed
   var dropdown = document.querySelectorAll('.dropdown-trigger');
   // eslint-disable-next-line
   var dropdownInstances = M.Dropdown.init(dropdown, {});
+  // var fullScreenInstance = M.Materialbox.init(fullScreen, {});
 });
 
 ReactDOM.render(
