@@ -43,6 +43,7 @@ const Game = (props) => {
         level={gameLevel.value}
         border={gameBorder}
         scoreHandler={increaseScore}
+        newGameHandler={newGameHandler}
         startStopHandler={startStopGame}
       />
 

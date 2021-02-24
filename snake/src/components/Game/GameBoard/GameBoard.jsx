@@ -24,6 +24,7 @@ export const GameBoard = ({
   isPlaying,
   isGameOver,
   scoreHandler,
+  newGameHandler,
   startStopHandler,
 }) => {
   const [snakeHeadX, setSnakeHeadX] = useState();
@@ -73,11 +74,11 @@ export const GameBoard = ({
     },
     [
       isPlaying,
-      direction,
       startStopHandler,
-      isDirectionChanged,
+      direction,
       snakeHeadX,
       snakeHeadY,
+      isDirectionChanged,
     ]
   );
 
@@ -110,10 +111,10 @@ export const GameBoard = ({
   const eatYourself = useCallback(() => {
     for (let i = snake.length - 1; i >= 1; i--) {
       if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
-        startStopHandler();
+        newGameHandler();
       }
     }
-  }, [snake, startStopHandler]);
+  }, [snake, newGameHandler]);
 
   const finishGame = useCallback(() => {
     if (
@@ -122,9 +123,9 @@ export const GameBoard = ({
       snakeHeadX === RIGHT_BORDER + BOX ||
       snakeHeadY === BOTTOM_BORDER + BOX
     ) {
-      startStopHandler();
+      newGameHandler();
     }
-  }, [snakeHeadX, snakeHeadY, startStopHandler]);
+  }, [snakeHeadX, snakeHeadY, newGameHandler]);
 
   const crossBorder = useCallback(() => {
     if (snakeHeadX < LEFT_BORDER - BOX) {
@@ -178,7 +179,7 @@ export const GameBoard = ({
     setSnake(currentSnake);
   }, [snake, snakeHeadX, snakeHeadY]);
 
-  const drawGame = () => {
+  const drawGame = useCallback(() => {
     changeSnakeHeadPosition();
     changeSnakeHead();
 
@@ -187,14 +188,23 @@ export const GameBoard = ({
 
     eatPrey();
     setIsDirectionChanged(false);
-  };
+  }, [
+    border,
+    snake.length,
+    eatPrey,
+    finishGame,
+    eatYourself,
+    crossBorder,
+    changeSnakeHead,
+    changeSnakeHeadPosition,
+  ]);
+
+  useEffect(() => {
+    if (isGameOver) initGame();
+  }, [isGameOver, initGame]);
 
   useEffect(() => {
     let timerId = null;
-
-    if (isGameOver) {
-      initGame();
-    }
 
     if (isPlaying) {
       timerId = setInterval(() => {
@@ -202,13 +212,18 @@ export const GameBoard = ({
       }, level);
     }
 
+    return () => {
+      clearInterval(timerId);
+    };
+  }, [isPlaying, level, drawGame]);
+
+  useEffect(() => {
     document.addEventListener('keydown', changeDirection);
 
     return () => {
-      clearInterval(timerId);
       document.removeEventListener('keydown', changeDirection);
     };
-  }, [isGameOver, isPlaying, level, initGame, changeDirection]);
+  }, [changeDirection]);
 
   const renderSnake = useCallback(
     () =>

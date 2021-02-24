@@ -1,5 +1,5 @@
 const initialState = {
-  all: [],
+  statistics: [],
 
   best: {
     score: 0,
