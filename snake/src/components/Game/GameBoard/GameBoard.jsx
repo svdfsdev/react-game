@@ -147,6 +147,14 @@ export const GameBoard = ({
   const changeDirection = useCallback(
     (e) => {
       if (isDirectionChanged) return;
+      if (
+        snakeHeadX < LEFT_BORDER ||
+        snakeHeadX >= 750 ||
+        snakeHeadY < TOP_BORDER ||
+        snakeHeadY >= 450
+      ) {
+        return;
+      }
 
       switch (e.keyCode) {
         case START_STOP_GAME:
@@ -174,7 +182,14 @@ export const GameBoard = ({
       setDirection(e.keyCode);
       if (isPlaying) setIsDirectionChanged(true);
     },
-    [isPlaying, direction, startStopHandler, isDirectionChanged]
+    [
+      isPlaying,
+      direction,
+      startStopHandler,
+      isDirectionChanged,
+      snakeHeadX,
+      snakeHeadY,
+    ]
   );
 
   useEffect(() => {

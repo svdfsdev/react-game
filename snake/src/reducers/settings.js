@@ -15,7 +15,7 @@ const initialState = {
 
   gameBorder: false,
   gameBoard: ['Lawn', 'Sand', 'Water'],
-  gamePrey: ['Apple', 'Carrot', 'Coffee', 'Beer', 'Ice cream'],
+  gamePrey: ['Apple', 'Carrot', 'Cherry'],
   gameLevel: levelsList[0],
 };
 
