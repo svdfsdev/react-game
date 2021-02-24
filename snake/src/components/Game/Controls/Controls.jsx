@@ -1,13 +1,14 @@
 import React from 'react';
 import './Controls.scss';
 import { Button } from '../../UI/Button/Button';
-import { playPauseIcon, fullScreenIcon } from '../../../utils/icons';
+import { playPauseIcon, fullScreenIcon, againIcon } from '../../../utils/icons';
 
 export const Controls = ({
   isPlaying,
   isFullScreen,
   startStopGame,
   setFullScreen,
+  newGameHandler,
 }) => {
   return (
     <div className="Controls">
@@ -16,6 +17,14 @@ export const Controls = ({
         btnType={'floating'}
         value={isFullScreen}
         handler={setFullScreen}
+      />
+
+      <Button
+        icon={againIcon}
+        btnType={'floating btn-large'}
+        value={true}
+        color={'amber darken-3'}
+        handler={newGameHandler}
       />
 
       <Button

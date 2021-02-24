@@ -5,8 +5,12 @@ export const Button = ({ label, icon, btnType, color, value, handler }) => {
   const btnStyle = `btn-${btnType || 'small'}`;
   let btnColor = 'grey darken-2';
 
-  if (color) {
+  if (color && typeof color === 'boolean') {
     btnColor = value ? 'red' : 'green';
+  }
+
+  if (color && typeof color === 'string') {
+    btnColor = color;
   }
 
   return (

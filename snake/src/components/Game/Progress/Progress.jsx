@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { getDisplayValue } from '../../../utils/helper';
 import './Progress.scss';
 
-export const Progress = ({ score, isPlaying }) => {
+export const Progress = ({ score, isPlaying, isGameOver }) => {
   const [time, setTime] = useState({ minutes: 0, seconds: 0 });
 
   useEffect(() => {
     let timer = null;
+
+    if (isGameOver) {
+      timer = null;
+      setTime({ minutes: 0, seconds: 0 });
+    }
 
     if (isPlaying) {
       timer = setInterval(() => {
@@ -26,7 +31,7 @@ export const Progress = ({ score, isPlaying }) => {
     }
 
     return () => clearInterval(timer);
-  }, [isPlaying, time.minutes, time.seconds]);
+  }, [isPlaying, isGameOver, time.minutes, time.seconds]);
 
   return (
     <div className="Progress">

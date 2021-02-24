@@ -15,6 +15,11 @@
     transition: 0.5s;
     background: #f44336c7 !important;
   }
+
+  &.amber:hover {
+    transition: 0.5s;
+    background: #ff9100bd !important;
+  }
 }
 
 #nav-mobile > li > a {

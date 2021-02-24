@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './GameBoard.scss';
 import {
   DIRECTION_DOWN,
@@ -22,127 +22,16 @@ export const GameBoard = ({
   level,
   border,
   isPlaying,
+  isGameOver,
   scoreHandler,
   startStopHandler,
 }) => {
-  const [prey, setPrey] = useState({
-    x: getRandomNumber(GAMEBOARD_WIDTH, BOX),
-    y: getRandomNumber(GAMEBOARD_HEIGHT, BOX),
-  });
-  const [snakeHeadX, setSnakeHeadX] = useState(RIGHT_BORDER / 2);
-  const [snakeHeadY, setSnakeHeadY] = useState(BOTTOM_BORDER / 2);
-  const [direction, setDirection] = useState(DIRECTION_RIGHT);
-  const [isDirectionChanged, setIsDirectionChanged] = useState(false);
-
-  const snakePositions = useMemo(() => {
-    return [{ x: RIGHT_BORDER / 2, y: BOTTOM_BORDER / 2 }];
-  }, []);
-
-  const changeSnakeHeadPosition = useCallback(() => {
-    switch (direction) {
-      case DIRECTION_LEFT:
-        setSnakeHeadX((prev) => prev - BOX);
-        return;
-
-      case DIRECTION_UP:
-        setSnakeHeadY((prev) => prev - BOX);
-        return;
-
-      case DIRECTION_RIGHT:
-        setSnakeHeadX((prev) => prev + BOX);
-        return;
-
-      case DIRECTION_DOWN:
-        setSnakeHeadY((prev) => prev + BOX);
-        return;
-
-      default:
-        return;
-    }
-  }, [direction]);
-
-  const changeSnakeHead = useCallback(() => {
-    snakePositions.pop();
-    snakePositions.unshift({ x: snakeHeadX, y: snakeHeadY });
-  }, [snakePositions, snakeHeadX, snakeHeadY]);
-
-  const finishGame = useCallback(() => {
-    if (
-      snakeHeadX === LEFT_BORDER - BOX ||
-      snakeHeadY === TOP_BORDER - BOX ||
-      snakeHeadX === RIGHT_BORDER + BOX ||
-      snakeHeadY === BOTTOM_BORDER + BOX
-    ) {
-      startStopHandler();
-    }
-  }, [snakeHeadX, snakeHeadY, startStopHandler]);
-
-  const crossBorder = useCallback(() => {
-    if (snakeHeadX < LEFT_BORDER) {
-      setSnakeHeadX(750);
-      return;
-    }
-
-    if (snakeHeadX > 750) {
-      setSnakeHeadX(LEFT_BORDER);
-      return;
-    }
-
-    if (snakeHeadY < TOP_BORDER - BOX) {
-      setSnakeHeadY(450);
-      return;
-    }
-
-    if (snakeHeadY > 450) {
-      setSnakeHeadY(TOP_BORDER);
-      return;
-    }
-  }, [snakeHeadX, snakeHeadY]);
-
-  const eatPrey = useCallback(() => {
-    if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
-      scoreHandler();
-
-      snakePositions.unshift({ x: snakeHeadX, y: snakeHeadY });
-
-      setPrey({
-        x: getRandomNumber(GAMEBOARD_WIDTH, BOX),
-        y: getRandomNumber(GAMEBOARD_HEIGHT, BOX),
-      });
-    }
-  }, [snakePositions, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
-
-  const eatYourself = useCallback(() => {
-    for (let i = snakePositions.length - 1; i >= 1; i--) {
-      if (
-        snakePositions[0].x === snakePositions[i].x &&
-        snakePositions[0].y === snakePositions[i].y
-      ) {
-        startStopHandler();
-      }
-    }
-  }, [snakePositions, startStopHandler]);
-
-  const drawGame = useCallback(() => {
-    changeSnakeHeadPosition();
-    changeSnakeHead();
-
-    if (snakePositions.length > 3) eatYourself();
-
-    border ? finishGame() : crossBorder();
-    eatPrey();
-
-    setIsDirectionChanged(false);
-  }, [
-    border,
-    snakePositions.length,
-    eatPrey,
-    finishGame,
-    eatYourself,
-    crossBorder,
-    changeSnakeHead,
-    changeSnakeHeadPosition,
-  ]);
+  const [snakeHeadX, setSnakeHeadX] = useState();
+  const [snakeHeadY, setSnakeHeadY] = useState();
+  const [prey, setPrey] = useState({ x: null, y: null });
+  const [snake, setSnake] = useState([{ x: null, y: null }]);
+  const [direction, setDirection] = useState();
+  const [isDirectionChanged, setIsDirectionChanged] = useState();
 
   const changeDirection = useCallback(
     (e) => {
@@ -192,34 +81,138 @@ export const GameBoard = ({
     ]
   );
 
+  const initGame = useCallback(() => {
+    setPrey({
+      x: getRandomNumber(GAMEBOARD_WIDTH, BOX),
+      y: getRandomNumber(GAMEBOARD_HEIGHT, BOX),
+    });
+    setSnake([{ x: RIGHT_BORDER / 2, y: BOTTOM_BORDER / 2 }]);
+    setSnakeHeadX(RIGHT_BORDER / 2);
+    setSnakeHeadY(BOTTOM_BORDER / 2);
+    setDirection(DIRECTION_RIGHT);
+    setIsDirectionChanged(false);
+  }, []);
+
+  const eatPrey = useCallback(() => {
+    if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
+      scoreHandler();
+      const currentSnake = snake;
+      currentSnake.unshift({ x: snakeHeadX, y: snakeHeadY });
+
+      setSnake(currentSnake);
+      setPrey({
+        x: getRandomNumber(GAMEBOARD_WIDTH, BOX),
+        y: getRandomNumber(GAMEBOARD_HEIGHT, BOX),
+      });
+    }
+  }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
+
+  const eatYourself = useCallback(() => {
+    for (let i = snake.length - 1; i >= 1; i--) {
+      if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+        startStopHandler();
+      }
+    }
+  }, [snake, startStopHandler]);
+
+  const finishGame = useCallback(() => {
+    if (
+      snakeHeadX === LEFT_BORDER - BOX ||
+      snakeHeadY === TOP_BORDER - BOX ||
+      snakeHeadX === RIGHT_BORDER + BOX ||
+      snakeHeadY === BOTTOM_BORDER + BOX
+    ) {
+      startStopHandler();
+    }
+  }, [snakeHeadX, snakeHeadY, startStopHandler]);
+
+  const crossBorder = useCallback(() => {
+    if (snakeHeadX < LEFT_BORDER - BOX) {
+      setSnakeHeadX(750);
+      return;
+    }
+
+    if (snakeHeadX > 750) {
+      setSnakeHeadX(LEFT_BORDER);
+      return;
+    }
+
+    if (snakeHeadY < TOP_BORDER - BOX) {
+      setSnakeHeadY(450);
+      return;
+    }
+
+    if (snakeHeadY > 450) {
+      setSnakeHeadY(TOP_BORDER);
+      return;
+    }
+  }, [snakeHeadX, snakeHeadY]);
+
+  const changeSnakeHeadPosition = useCallback(() => {
+    switch (direction) {
+      case DIRECTION_LEFT:
+        setSnakeHeadX((prev) => prev - BOX);
+        return;
+
+      case DIRECTION_UP:
+        setSnakeHeadY((prev) => prev - BOX);
+        return;
+
+      case DIRECTION_RIGHT:
+        setSnakeHeadX((prev) => prev + BOX);
+        return;
+
+      case DIRECTION_DOWN:
+        setSnakeHeadY((prev) => prev + BOX);
+        return;
+
+      default:
+        return;
+    }
+  }, [direction]);
+
+  const changeSnakeHead = useCallback(() => {
+    const currentSnake = snake;
+    currentSnake.pop();
+    currentSnake.unshift({ x: snakeHeadX, y: snakeHeadY });
+    setSnake(currentSnake);
+  }, [snake, snakeHeadX, snakeHeadY]);
+
+  const drawGame = () => {
+    changeSnakeHeadPosition();
+    changeSnakeHead();
+
+    if (snake.length > 3) eatYourself();
+    border ? finishGame() : crossBorder();
+
+    eatPrey();
+    setIsDirectionChanged(false);
+  };
+
   useEffect(() => {
-    let game = null;
+    let timerId = null;
+
+    if (isGameOver) {
+      initGame();
+    }
 
     if (isPlaying) {
-      game = setInterval(() => {
-        drawGame(direction);
+      timerId = setInterval(() => {
+        drawGame();
       }, level);
-    } else clearInterval(game);
+    }
 
     document.addEventListener('keydown', changeDirection);
 
     return () => {
-      clearInterval(game);
+      clearInterval(timerId);
       document.removeEventListener('keydown', changeDirection);
     };
-  }, [
-    level,
-    isPlaying,
-    snakeHeadX,
-    snakeHeadY,
-    direction,
-    drawGame,
-    changeDirection,
-  ]);
+  }, [isGameOver, isPlaying, level, initGame, changeDirection]);
 
   const renderSnake = useCallback(
     () =>
-      snakePositions.map((it, i) => (
+      snake.map((it, i) => (
         <div
           key={i}
           className="Snake"
@@ -229,7 +222,7 @@ export const GameBoard = ({
           }}
         ></div>
       )),
-    [snakePositions]
+    [snake]
   );
 
   return (
