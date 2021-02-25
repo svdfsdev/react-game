@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import './GameBoard.scss';
 import {
   DIRECTION_DOWN,
@@ -34,17 +34,31 @@ export const GameBoard = ({
   const [direction, setDirection] = useState();
   const [isDirectionChanged, setIsDirectionChanged] = useState();
 
+  const isSnakeHeadOutsideGameboard = useMemo(() => {
+    return (
+      snakeHeadX < LEFT_BORDER ||
+      snakeHeadX >= 750 ||
+      snakeHeadY < TOP_BORDER ||
+      snakeHeadY >= 450
+    );
+  }, [snakeHeadX, snakeHeadY]);
+
+  const validateDirection = useCallback(
+    (keyCode) => {
+      return (
+        (keyCode === DIRECTION_RIGHT && direction === DIRECTION_LEFT) ||
+        (keyCode === DIRECTION_LEFT && direction === DIRECTION_RIGHT) ||
+        (keyCode === DIRECTION_DOWN && direction === DIRECTION_UP) ||
+        (keyCode === DIRECTION_UP && direction === DIRECTION_DOWN)
+      );
+    },
+    [direction]
+  );
+
   const changeDirection = useCallback(
     (e) => {
       if (isDirectionChanged) return;
-      if (
-        snakeHeadX < LEFT_BORDER ||
-        snakeHeadX >= 750 ||
-        snakeHeadY < TOP_BORDER ||
-        snakeHeadY >= 450
-      ) {
-        return;
-      }
+      if (isSnakeHeadOutsideGameboard) return;
 
       switch (e.keyCode) {
         case START_STOP_GAME:
@@ -61,13 +75,7 @@ export const GameBoard = ({
           return;
       }
 
-      if (
-        (e.keyCode === DIRECTION_RIGHT && direction === DIRECTION_LEFT) ||
-        (e.keyCode === DIRECTION_LEFT && direction === DIRECTION_RIGHT) ||
-        (e.keyCode === DIRECTION_DOWN && direction === DIRECTION_UP) ||
-        (e.keyCode === DIRECTION_UP && direction === DIRECTION_DOWN)
-      )
-        return;
+      if (validateDirection(e.keyCode)) return;
 
       setDirection(e.keyCode);
       if (isPlaying) setIsDirectionChanged(true);
@@ -75,10 +83,9 @@ export const GameBoard = ({
     [
       isPlaying,
       startStopHandler,
-      direction,
-      snakeHeadX,
-      snakeHeadY,
+      validateDirection,
       isDirectionChanged,
+      isSnakeHeadOutsideGameboard,
     ]
   );
 
@@ -111,10 +118,11 @@ export const GameBoard = ({
   const eatYourself = useCallback(() => {
     for (let i = snake.length - 1; i >= 1; i--) {
       if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
-        newGameHandler();
+        // newGameHandler();
+        startStopHandler();
       }
     }
-  }, [snake, newGameHandler]);
+  }, [snake, startStopHandler]);
 
   const finishGame = useCallback(() => {
     if (
@@ -123,9 +131,10 @@ export const GameBoard = ({
       snakeHeadX === RIGHT_BORDER + BOX ||
       snakeHeadY === BOTTOM_BORDER + BOX
     ) {
-      newGameHandler();
+      // newGameHandler();
+      startStopHandler();
     }
-  }, [snakeHeadX, snakeHeadY, newGameHandler]);
+  }, [snakeHeadX, snakeHeadY, startStopHandler]);
 
   const crossBorder = useCallback(() => {
     if (snakeHeadX < LEFT_BORDER - BOX) {
