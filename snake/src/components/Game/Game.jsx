@@ -5,6 +5,7 @@ import { Progress } from './Progress/Progress';
 import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 import { Result } from './Result/Result';
+import { saveStatistics } from '../../actions/statisticsActions';
 
 const Game = (props) => {
   const [timer, setTimer] = useState(0);
@@ -15,6 +16,7 @@ const Game = (props) => {
   const [isShowResult, setIsShowResult] = useState(false);
 
   const { gameLevel, gameBorder } = props.settings;
+  const { saveStatistics } = props;
 
   const newGame = useCallback(() => {
     setScore(0);
@@ -65,6 +67,12 @@ const Game = (props) => {
     }
   }, [isGameOver]);
 
+  useEffect(() => {
+    if (isGameOver && isShowResult) {
+      saveStatistics({ score, timer });
+    }
+  }, [isGameOver, isShowResult, score, timer, saveStatistics]);
+
   return (
     <div className="Game">
       <Progress
@@ -95,13 +103,15 @@ const Game = (props) => {
         startStop={startStopGame}
       />
 
-      <Controls
-        isPlaying={isPlaying}
-        isFullScreen={isFullScreen}
-        startStopGame={startStopGame}
-        setFullScreen={setFullScreen}
-        resetGame={resetGame}
-      />
+      {!isShowResult && (
+        <Controls
+          isPlaying={isPlaying}
+          isFullScreen={isFullScreen}
+          startStopGame={startStopGame}
+          setFullScreen={setFullScreen}
+          resetGame={resetGame}
+        />
+      )}
     </div>
   );
 };
@@ -110,4 +120,8 @@ const mapStateToProps = (store) => ({
   settings: store.settings,
 });
 
-export default connect(mapStateToProps)(Game);
+const mapDispatchToProps = (dispatch) => ({
+  saveStatistics: (game) => dispatch(saveStatistics(game)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
