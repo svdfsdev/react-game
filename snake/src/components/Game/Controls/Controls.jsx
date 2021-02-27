@@ -4,18 +4,21 @@ import { Button } from '../../UI/Button/Button';
 import { playPauseIcon, fullScreenIcon, againIcon } from '../../../utils/icons';
 
 export const Controls = ({
+  resetGame,
   isPlaying,
+  isGameOver,
   isFullScreen,
   startStopGame,
   setFullScreen,
-  newGameHandler,
 }) => {
   return (
-    <div className="Controls">
+    // <div className="Controls">
+    <div className={`Controls ${isGameOver ? 'visible' : ''}`}>
       <Button
         icon={fullScreenIcon}
-        btnType={'floating'}
+        btnType={'floating btn-large'}
         value={isFullScreen}
+        color={'blue'}
         handler={setFullScreen}
       />
 
@@ -24,7 +27,7 @@ export const Controls = ({
         btnType={'floating btn-large'}
         value={true}
         color={'amber darken-3'}
-        handler={newGameHandler}
+        handler={resetGame}
       />
 
       <Button

@@ -2,12 +2,6 @@
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-
-  .Canvas {
-    width: 750px;
-    height: 450px;
-    margin: 0 auto;
-    background: cornflowerblue;
-  }
+  justify-content: space-between;
+  position: relative;
 }

@@ -1,5 +1,13 @@
 .Progress {
   display: flex;
   justify-content: space-evenly;
+  margin-top: 3vh;
   transition: 0.2s;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+    z-index: 20;
+    transition: 0.2s;
+  }
 }

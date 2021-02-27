@@ -21,18 +21,17 @@ const BOX = 25;
 export const GameBoard = ({
   level,
   border,
+  startStop,
   isPlaying,
   isGameOver,
   scoreHandler,
-  newGameHandler,
-  startStopHandler,
+  finishGame,
 }) => {
   const [snakeHeadX, setSnakeHeadX] = useState();
   const [snakeHeadY, setSnakeHeadY] = useState();
   const [prey, setPrey] = useState({ x: null, y: null });
   const [snake, setSnake] = useState([{ x: null, y: null }]);
   const [direction, setDirection] = useState();
-  const [isDirectionChanged, setIsDirectionChanged] = useState();
 
   const isSnakeHeadOutsideGameboard = useMemo(() => {
     return (
@@ -42,6 +41,28 @@ export const GameBoard = ({
       snakeHeadY >= 450
     );
   }, [snakeHeadX, snakeHeadY]);
+
+  const isSnakeHitWall = useMemo(() => {
+    return (
+      snakeHeadX === LEFT_BORDER - BOX ||
+      snakeHeadY === TOP_BORDER - BOX ||
+      snakeHeadX === RIGHT_BORDER + BOX ||
+      snakeHeadY === BOTTOM_BORDER + BOX
+    );
+  }, [snakeHeadX, snakeHeadY]);
+
+  const isEatYourself = useMemo(() => {
+    let isEat = false;
+
+    for (let i = snake.length - 1; i >= 1; i--) {
+      if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+        isEat = true;
+        break;
+      }
+    }
+
+    return isEat;
+  }, [snake]);
 
   const validateDirection = useCallback(
     (keyCode) => {
@@ -57,12 +78,11 @@ export const GameBoard = ({
 
   const changeDirection = useCallback(
     (e) => {
-      if (isDirectionChanged) return;
       if (isSnakeHeadOutsideGameboard) return;
 
       switch (e.keyCode) {
         case START_STOP_GAME:
-          startStopHandler();
+          startStop();
           return;
 
         case DIRECTION_RIGHT:
@@ -78,15 +98,8 @@ export const GameBoard = ({
       if (validateDirection(e.keyCode)) return;
 
       setDirection(e.keyCode);
-      if (isPlaying) setIsDirectionChanged(true);
     },
-    [
-      isPlaying,
-      startStopHandler,
-      validateDirection,
-      isDirectionChanged,
-      isSnakeHeadOutsideGameboard,
-    ]
+    [startStop, validateDirection, isSnakeHeadOutsideGameboard]
   );
 
   const initGame = useCallback(() => {
@@ -98,14 +111,12 @@ export const GameBoard = ({
     setSnakeHeadX(RIGHT_BORDER / 2);
     setSnakeHeadY(BOTTOM_BORDER / 2);
     setDirection(DIRECTION_RIGHT);
-    setIsDirectionChanged(false);
   }, []);
 
   const eatPrey = useCallback(() => {
     if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
       scoreHandler();
-      const currentSnake = snake;
-      currentSnake.unshift({ x: snakeHeadX, y: snakeHeadY });
+      const currentSnake = [{ x: snakeHeadX, y: snakeHeadY }, ...snake];
 
       setSnake(currentSnake);
       setPrey({
@@ -114,27 +125,6 @@ export const GameBoard = ({
       });
     }
   }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
-
-  const eatYourself = useCallback(() => {
-    for (let i = snake.length - 1; i >= 1; i--) {
-      if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
-        // newGameHandler();
-        startStopHandler();
-      }
-    }
-  }, [snake, startStopHandler]);
-
-  const finishGame = useCallback(() => {
-    if (
-      snakeHeadX === LEFT_BORDER - BOX ||
-      snakeHeadY === TOP_BORDER - BOX ||
-      snakeHeadX === RIGHT_BORDER + BOX ||
-      snakeHeadY === BOTTOM_BORDER + BOX
-    ) {
-      // newGameHandler();
-      startStopHandler();
-    }
-  }, [snakeHeadX, snakeHeadY, startStopHandler]);
 
   const crossBorder = useCallback(() => {
     if (snakeHeadX < LEFT_BORDER - BOX) {
@@ -182,26 +172,38 @@ export const GameBoard = ({
   }, [direction]);
 
   const changeSnakeHead = useCallback(() => {
-    const currentSnake = snake;
-    currentSnake.pop();
-    currentSnake.unshift({ x: snakeHeadX, y: snakeHeadY });
+    const currentSnake = [
+      { x: snakeHeadX, y: snakeHeadY },
+      ...snake.slice(0, -1),
+    ];
+
     setSnake(currentSnake);
   }, [snake, snakeHeadX, snakeHeadY]);
+
+  const eatYourself = useCallback(() => {
+    if (isEatYourself) {
+      finishGame();
+    }
+  }, [isEatYourself, finishGame]);
 
   const drawGame = useCallback(() => {
     changeSnakeHeadPosition();
     changeSnakeHead();
 
-    if (snake.length > 3) eatYourself();
-    border ? finishGame() : crossBorder();
+    eatYourself();
+
+    if (border && isSnakeHitWall) {
+      finishGame();
+    } else {
+      crossBorder();
+    }
 
     eatPrey();
-    setIsDirectionChanged(false);
   }, [
     border,
-    snake.length,
-    eatPrey,
     finishGame,
+    isSnakeHitWall,
+    eatPrey,
     eatYourself,
     crossBorder,
     changeSnakeHead,
@@ -209,16 +211,16 @@ export const GameBoard = ({
   ]);
 
   useEffect(() => {
-    if (isGameOver) initGame();
+    if (isGameOver) {
+      initGame();
+    }
   }, [isGameOver, initGame]);
 
   useEffect(() => {
     let timerId = null;
 
     if (isPlaying) {
-      timerId = setInterval(() => {
-        drawGame();
-      }, level);
+      timerId = setInterval(drawGame, level);
     }
 
     return () => {

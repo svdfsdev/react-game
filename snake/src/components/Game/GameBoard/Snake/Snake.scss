@@ -3,25 +3,6 @@
   width: 25px;
   height: 25px;
   background: olivedrab;
-  transition: 10ms;
 
-  .head {
-    // Доделать вид головы и хвоста червяка
-    //  в зависимости от направления
-    &.top {
-      border-radius: 12px 12px 0 0;
-    }
-
-    &.bottom {
-      border-radius: 0 0 12px 12px;
-    }
-
-    &.right {
-      border-radius: 0 12px 12px 0;
-    }
-
-    &.left {
-      border-radius: 12px 0 0 12px;
-    }
-  }
+  // }
 }

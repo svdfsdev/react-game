@@ -1,0 +1,49 @@
+.Result {
+  width: 750px;
+  height: 450px;
+  z-index: 9;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  opacity: 0;
+  background: rgb(219, 219, 219);
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: 10ms;
+  background-image: url(../../../assets//img/bricks.png);
+
+  .game-over {
+    color: #701717;
+    font-weight: 700;
+    font-size: 7vh;
+  }
+
+  .score,
+  .time {
+    margin: 0;
+    padding: 0;
+    color: #701717;
+    font-size: 4.5vh;
+    font-weight: 700;
+  }
+
+  .start-game {
+    width: max-content;
+  }
+
+  &.visible {
+    opacity: 1;
+    z-index: 20;
+    transition: 0.3s;
+  }
+}

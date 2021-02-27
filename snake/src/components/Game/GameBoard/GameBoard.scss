@@ -1,9 +1,15 @@
 .GameBoard {
-  position: relative;
   width: 750px;
   height: 450px;
-  margin: 0 auto;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   overflow: hidden;
+  transition: 0.5s;
 
   .background {
     width: 100%;
@@ -30,6 +36,22 @@
     width: 25px;
     height: 25px;
     background: lightsalmon;
-    transition: 10ms;
+    // transition: 10ms;
+
+    &.top {
+      border-radius: 12px 12px 0 0;
+    }
+
+    &.bottom {
+      border-radius: 0 0 12px 12px;
+    }
+
+    &.right {
+      border-radius: 0 12px 12px 0;
+    }
+
+    &.left {
+      border-radius: 12px 0 0 12px;
+    }
   }
 }
