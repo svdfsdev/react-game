@@ -68,7 +68,7 @@ const Game = (props) => {
   }, [isGameOver]);
 
   useEffect(() => {
-    if (isGameOver && isShowResult) {
+    if (isGameOver && isShowResult && timer > 0) {
       saveStatistics({ score, timer });
     }
   }, [isGameOver, isShowResult, score, timer, saveStatistics]);

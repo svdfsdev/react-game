@@ -15,7 +15,7 @@ export const Button = ({ label, icon, btnType, color, value, handler }) => {
 
   return (
     <a
-      href="!#"
+      href="#!"
       className={`Button waves-effect waves-light ${btnStyle} z-depth-0 ${btnColor}`}
       onClick={handler}
     >
