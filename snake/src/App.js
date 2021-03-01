@@ -3,15 +3,18 @@ import { Route } from 'react-router-dom';
 import './App.scss';
 import { Footer } from './components/Footer/Footer';
 import Game from './components/Game/Game';
-import Navbar from './components/Navbar/Navbar';
+import Header from './components/Header/Header';
+import Settings from './components/Settings/Settings';
 import Statistics from './components/Statistics/Statistics';
 
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      <Header />
 
       <Route path="/statistics" component={Statistics} />
+
+      <Route path="/settings" component={Settings} />
 
       <Route path="/" exact component={Game} />
 

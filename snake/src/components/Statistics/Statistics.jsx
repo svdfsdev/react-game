@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './Statistics.scss';
 import { getDisplayValue } from '../../utils/helper';
@@ -12,8 +11,9 @@ const Statistics = ({ statistics }) => {
   const resultsList = results.map((res, i) => {
     return (
       <li className="collection-item" key={i}>
-        <span>{res.score}</span>
-        <span>
+        <span className="number">{i + 1}.</span>
+        <span className="score">{res.score}</span>
+        <span className="time">
           {getDisplayValue(Math.trunc(res.timer / 60))}:
           {getDisplayValue(res.timer % 60)}
         </span>
@@ -23,16 +23,21 @@ const Statistics = ({ statistics }) => {
 
   return (
     <div className="Statistics">
-      <NavLink to="/">Go to game</NavLink>
+      <h2>Statistics</h2>
 
-      <ul className="collection with-header">
-        <li className="collection-header">
-          <span>Score</span>
-          <span>Time</span>
-        </li>
+      {resultsList.length ? (
+        <ul className="collection with-header">
+          <li className="collection-header">
+            <span className="number">#</span>
+            <span className="score">Score</span>
+            <span className="time">Time</span>
+          </li>
 
-        {resultsList}
-      </ul>
+          {resultsList}
+        </ul>
+      ) : (
+        <h2>No games yet</h2>
+      )}
     </div>
   );
 };

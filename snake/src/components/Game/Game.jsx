@@ -6,6 +6,7 @@ import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 import { Result } from './Result/Result';
 import { saveStatistics } from '../../actions/statisticsActions';
+import { levelsList } from '../../utils/guide';
 
 const Game = (props) => {
   const [timer, setTimer] = useState(0);
@@ -15,7 +16,7 @@ const Game = (props) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isShowResult, setIsShowResult] = useState(false);
 
-  const { gameLevel, gameBorder } = props.settings;
+  const { gameLevel, gameBorder, gameBoard, gamePrey } = props.settings;
   const { saveStatistics } = props;
 
   const newGame = useCallback(() => {
@@ -96,11 +97,13 @@ const Game = (props) => {
         score={score}
         isPlaying={isPlaying}
         isGameOver={isGameOver}
-        level={gameLevel.value}
+        level={levelsList[gameLevel].value}
         border={gameBorder}
         scoreHandler={increaseScore}
         finishGame={finishGame}
         startStop={startStopGame}
+        gameBoard={gameBoard}
+        gamePrey={gamePrey}
       />
 
       {!isShowResult && (

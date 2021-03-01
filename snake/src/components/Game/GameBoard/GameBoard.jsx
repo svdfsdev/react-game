@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import './GameBoard.scss';
 import {
+  gameboard_bkg,
   DIRECTION_DOWN,
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
@@ -26,6 +27,8 @@ export const GameBoard = ({
   isGameOver,
   scoreHandler,
   finishGame,
+  gameBoard,
+  gamePrey,
 }) => {
   const [snakeHeadX, setSnakeHeadX] = useState();
   const [snakeHeadY, setSnakeHeadY] = useState();
@@ -253,8 +256,8 @@ export const GameBoard = ({
 
   return (
     <div className="GameBoard">
-      <div className="background lawn"></div>
-      <Prey x={prey.x} y={prey.y} />
+      <div className={`background ${gameboard_bkg[gameBoard]}`}></div>
+      <Prey x={prey.x} y={prey.y} gamePrey={gamePrey} />
 
       {renderSnake()}
     </div>

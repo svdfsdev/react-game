@@ -4,6 +4,9 @@ export const levelsList = [
   { label: 'Hard', value: 50 },
 ];
 
+export const gameboard_bkg = ['Lawn', 'Sand', 'Water'];
+export const prey_bkg = ['Apple', 'Carrot', 'Cherry'];
+
 export const DIRECTION_UP = 38;
 export const DIRECTION_DOWN = 40;
 export const DIRECTION_LEFT = 37;
