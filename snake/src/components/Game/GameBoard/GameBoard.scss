@@ -10,6 +10,11 @@
   margin: auto;
   overflow: hidden;
   transition: 0.5s;
+  box-sizing: content-box;
+
+  &.border {
+    border: 1vh solid whitesmoke !important;
+  }
 
   .background {
     width: 100%;

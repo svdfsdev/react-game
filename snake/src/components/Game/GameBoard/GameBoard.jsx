@@ -255,7 +255,7 @@ export const GameBoard = ({
   );
 
   return (
-    <div className="GameBoard">
+    <div className={`GameBoard ${border ? 'border' : ''}`}>
       <div className={`background ${gameboard_bkg[gameBoard]}`}></div>
       <Prey x={prey.x} y={prey.y} gamePrey={gamePrey} />
 
