@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import './GameBoard.scss';
 import {
-  gameboard_bkg,
   DIRECTION_DOWN,
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
@@ -14,6 +13,7 @@ import {
 } from '../../../utils/guide';
 import { getRandomNumber } from '../../../utils/helper';
 import { Prey } from './Prey/Prey';
+import { GameboardBkg } from './GameboardBkg/GameboardBkg';
 
 const BOTTOM_BORDER = 450;
 const RIGHT_BORDER = 750;
@@ -254,9 +254,20 @@ export const GameBoard = ({
     [snake]
   );
 
+  const gameBoardClasses = useMemo(() => {
+    const cls = ['GameBoard'];
+
+    if (border) {
+      cls.push('border');
+    }
+
+    return cls.join(' ');
+  }, [border]);
+
   return (
-    <div className={`GameBoard ${border ? 'border' : ''}`}>
-      <div className={`background ${gameboard_bkg[gameBoard]}`}></div>
+    <div className={gameBoardClasses}>
+      <GameboardBkg bkg={gameBoard} />
+
       <Prey x={prey.x} y={prey.y} gamePrey={gamePrey} />
 
       {renderSnake()}

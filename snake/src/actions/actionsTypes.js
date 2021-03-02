@@ -5,7 +5,6 @@ export const SET_SOUND_ON_OFF = 'SET_SOUND_ON_OFF';
 export const SET_SOUND_VOLUME = 'SET_SOUND_VOLUME';
 export const SET_GAMEBOARD_BKG = 'SET_GAMEBOARD_BKG';
 export const SET_PREY_IMG = 'SET_PREY_IMG';
-
 export const SET_BORDER = 'SET_BORDER';
 export const SET_LEVEL = 'SET_LEVEL';
 
@@ -13,5 +12,5 @@ export const SET_LEVEL = 'SET_LEVEL';
 export const PLAY_GAME = 'PLAY_GAME';
 export const SET_FULL_SCREEN = 'SET_FULL_SCREEN';
 
-//statistics
+// Statistics
 export const SAVE_STATISTICS = 'SAVE_STATISTICS';

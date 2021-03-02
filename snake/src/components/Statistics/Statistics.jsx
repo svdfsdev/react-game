@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './Statistics.scss';
 import { getDisplayValue } from '../../utils/helper';
+import { Table } from 'react-bootstrap';
 
 const Statistics = ({ statistics }) => {
   const results = [...statistics.results.slice(0, 10)].sort(
@@ -9,34 +10,37 @@ const Statistics = ({ statistics }) => {
   );
 
   const resultsList = results.map((res, i) => {
+    const minutes = getDisplayValue(Math.trunc(res.timer / 60));
+    const seconds = getDisplayValue(res.timer % 60);
+
     return (
-      <li className="collection-item" key={i}>
-        <span className="number">{i + 1}.</span>
-        <span className="score">{res.score}</span>
-        <span className="time">
-          {getDisplayValue(Math.trunc(res.timer / 60))}:
-          {getDisplayValue(res.timer % 60)}
-        </span>
-      </li>
+      <tr key={i}>
+        <td>{i + 1}</td>
+        <td>{res.score}</td>
+        <td>
+          {minutes}:{seconds}
+        </td>
+      </tr>
     );
   });
 
   return (
     <div className="Statistics">
-      <h2>Statistics</h2>
+      <h1>Statistics</h1>
 
       {resultsList.length ? (
-        <ul className="collection with-header">
-          <li className="collection-header">
-            <span className="number">#</span>
-            <span className="score">Score</span>
-            <span className="time">Time</span>
-          </li>
-
-          {resultsList}
-        </ul>
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Score</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>{resultsList}</tbody>
+        </Table>
       ) : (
-        <h2>No games yet</h2>
+        <h3>No games yet</h3>
       )}
     </div>
   );

@@ -4,6 +4,8 @@
   margin-top: 3vh;
   transition: 0.2s;
   opacity: 0;
+  font-size: 3vh;
+  font-weight: 700;
 
   &.visible {
     opacity: 1;

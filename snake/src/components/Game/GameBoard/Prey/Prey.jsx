@@ -3,9 +3,10 @@ import { prey_bkg } from '../../../../utils/guide';
 import './Prey.scss';
 
 export const Prey = ({ x, y, gamePrey }) => {
+  const classes = ['Prey', prey_bkg[gamePrey]];
   return (
     <div
-      className={`Prey ${prey_bkg[gamePrey]}`}
+      className={classes.join(' ')}
       style={{ left: `${x}px`, top: `${y}px` }}
     ></div>
   );

@@ -1,0 +1,24 @@
+.GameboardBkg {
+  width: 100%;
+  height: 100%;
+
+  &.None {
+    background: rgb(224, 223, 223);
+  }
+
+  &.Lawn {
+    opacity: 0.7;
+
+    background-image: url(../../../../assets/img/lawn.png);
+  }
+
+  &.Sand {
+    opacity: 0.9;
+    background-image: url(../../../../assets/img/sandy.png);
+  }
+
+  &.Water {
+    opacity: 0.9;
+    background-image: url(../../../../assets/img/water.png);
+  }
+}

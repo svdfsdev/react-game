@@ -1,42 +1,48 @@
 import React from 'react';
 import './Controls.scss';
-import { Button } from '../../UI/Button/Button';
-import { playPauseIcon, fullScreenIcon, againIcon } from '../../../utils/icons';
+import { Button } from 'react-bootstrap';
 
 export const Controls = ({
   resetGame,
   isPlaying,
   isGameOver,
-  isFullScreen,
   startStopGame,
   setFullScreen,
 }) => {
+  const classes = ['Controls'];
+
+  if (isGameOver) {
+    classes.push('visible');
+  }
+
+  const playBtn = {
+    label: isPlaying ? 'Pause' : 'Play',
+    variant: isPlaying ? 'danger' : 'success',
+  };
+
+  const newGameBtn = {
+    label: 'New game',
+    variant: 'warning',
+  };
+
+  const fullScreenBtn = {
+    label: 'Full screen',
+    variant: 'primary',
+  };
+
   return (
-    // <div className="Controls">
-    <div className={`Controls ${isGameOver ? 'visible' : ''}`}>
-      <Button
-        icon={fullScreenIcon}
-        btnType={'floating btn-large'}
-        value={isFullScreen}
-        color={'blue'}
-        handler={setFullScreen}
-      />
+    <div className={classes.join(' ')}>
+      <Button variant={fullScreenBtn.variant} onClick={setFullScreen}>
+        {fullScreenBtn.label}
+      </Button>
 
-      <Button
-        icon={againIcon}
-        btnType={'floating btn-large'}
-        value={true}
-        color={'amber darken-3'}
-        handler={resetGame}
-      />
+      <Button variant={newGameBtn.variant} onClick={resetGame}>
+        {newGameBtn.label}
+      </Button>
 
-      <Button
-        icon={playPauseIcon}
-        btnType={'floating btn-large'}
-        value={isPlaying}
-        color={true}
-        handler={startStopGame}
-      />
+      <Button variant={playBtn.variant} onClick={startStopGame}>
+        {playBtn.label}
+      </Button>
     </div>
   );
 };
