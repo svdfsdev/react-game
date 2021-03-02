@@ -11,10 +11,10 @@ import {
 
 const initialState = {
   musicOn: true,
-  musicVolume: 50,
+  musicVolume: 1,
 
   soundOn: true,
-  soundVolume: 50,
+  soundVolume: 1,
 
   gameBorder: true,
   gameBoard: 0,

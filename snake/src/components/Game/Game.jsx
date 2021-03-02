@@ -7,6 +7,7 @@ import { GameBoard } from './GameBoard/GameBoard';
 import { Result } from './Result/Result';
 import { saveStatistics } from '../../actions/statisticsActions';
 import { levelsList } from '../../utils/guide';
+import AudioEffects from './AudioEffects';
 
 const Game = (props) => {
   const [timer, setTimer] = useState(0);
@@ -76,6 +77,13 @@ const Game = (props) => {
 
   return (
     <div className="Game">
+      <AudioEffects
+        score={score}
+        isPlaying={isPlaying}
+        isGameOver={isGameOver}
+        isShowResult={isShowResult}
+      />
+
       <Progress
         score={score}
         timerValue={timer}

@@ -3,7 +3,7 @@ import './Footer.scss';
 
 export const Footer = () => {
   return (
-    <footer className="Footer page-footer grey darken-2">
+    <footer className="Footer">
       <div className="wrapper">
         <a
           className="gitHub-link"

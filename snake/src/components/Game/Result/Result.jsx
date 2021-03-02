@@ -4,7 +4,7 @@ import { againIcon } from '../../../utils/icons';
 import { Button } from '../../UI/Button/Button';
 import './Result.scss';
 
-export const Result = ({ score, timer, isGameOver, isShowResult, newGame }) => {
+export const Result = ({ score, timer, isShowResult, newGame }) => {
   const minutes = getDisplayValue(Math.trunc(timer / 60));
   const seconds = getDisplayValue(timer % 60);
 
