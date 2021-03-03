@@ -36,3 +36,7 @@ export function fullScreenCancel() {
     document.webkitCancelFullScreen();
   }
 }
+
+export function unfocusButton(e) {
+  e.target.blur();
+}

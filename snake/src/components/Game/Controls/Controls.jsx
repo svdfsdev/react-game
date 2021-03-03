@@ -8,6 +8,7 @@ export const Controls = ({
   isPlaying,
   isGameOver,
   startStopGame,
+  autoPlayHandler,
 }) => {
   const app = useRef();
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -32,6 +33,11 @@ export const Controls = ({
     variant: 'primary',
   };
 
+  const autoPlayBtn = {
+    label: 'Auto play',
+    variant: 'info',
+  };
+
   useEffect(() => {
     app.current = document.querySelector('.App');
   });
@@ -48,6 +54,10 @@ export const Controls = ({
 
   return (
     <div className={classes.join(' ')}>
+      <Button variant={autoPlayBtn.variant} onClick={autoPlayHandler}>
+        {autoPlayBtn.label}
+      </Button>
+
       <Button variant={fullScreenBtn.variant} onClick={fullScreenHandler}>
         {fullScreenBtn.label}
       </Button>

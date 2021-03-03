@@ -17,6 +17,7 @@ const Game = (props) => {
   const [isGameOver, setIsGameOver] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isShowResult, setIsShowResult] = useState(false);
+  const [isAutoPlay, setIsAutoPlay] = useState(false);
 
   const [box, setBox] = useState(0);
 
@@ -72,6 +73,10 @@ const Game = (props) => {
     setTimer(value);
   }, []);
 
+  const autoPlayHandler = () => {
+    setIsAutoPlay((prev) => !prev);
+  };
+
   useEffect(() => {
     if (!isGameOver) {
       setTimer(0);
@@ -100,6 +105,7 @@ const Game = (props) => {
         isGameOver={isGameOver}
         timerHandler={timerHandler}
         isShowResult={isShowResult}
+        isAutoPlay={isAutoPlay}
       />
 
       <Result
@@ -112,7 +118,7 @@ const Game = (props) => {
       />
 
       <GameBoard
-        isAutoPlay={true}
+        isAutoPlay={isAutoPlay}
         score={score}
         isPlaying={isPlaying}
         isGameOver={isGameOver}
@@ -133,6 +139,7 @@ const Game = (props) => {
           startStopGame={startStopGame}
           setFullScreen={setFullScreen}
           resetGame={resetGame}
+          autoPlayHandler={autoPlayHandler}
         />
       )}
     </div>

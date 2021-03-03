@@ -200,21 +200,29 @@ export const GameBoard = ({
   const autoPlay = useCallback(() => {
     let dir = direction;
 
+    function leftRightDirection() {
+      dir = prey.x < snakeHeadX ? DIRECTION_LEFT : DIRECTION_RIGHT;
+    }
+
+    function upDownDirection() {
+      dir = prey.y < snakeHeadY ? DIRECTION_UP : DIRECTION_DOWN;
+    }
+
     switch (true) {
-      case prey.x !== snakeHeadX:
-        dir = prey.x < snakeHeadX ? DIRECTION_LEFT : DIRECTION_RIGHT;
+      case prey.y === snakeHeadY:
+        leftRightDirection();
         break;
 
       case prey.x === snakeHeadX:
-        dir = prey.y < snakeHeadY ? DIRECTION_UP : DIRECTION_DOWN;
+        upDownDirection();
+        break;
+
+      case prey.x !== snakeHeadX:
+        leftRightDirection();
         break;
 
       case prey.y !== snakeHeadY:
-        dir = prey.y < snakeHeadY ? DIRECTION_UP : DIRECTION_DOWN;
-        break;
-
-      case prey.y === snakeHeadY:
-        dir = prey.x < snakeHeadX ? DIRECTION_LEFT : DIRECTION_RIGHT;
+        upDownDirection();
         break;
 
       default:

@@ -8,6 +8,7 @@ export const Progress = ({
   isGameOver,
   timerHandler,
   timerValue,
+  isAutoPlay,
 }) => {
   const [timer, setTimer] = useState(0);
 
@@ -43,8 +44,11 @@ export const Progress = ({
 
   return (
     <div className={classes.join(' ')}>
-      <span className="score">Score: {score}</span>
-      <span className="duration">
+      <span>Score: {score}</span>
+
+      {isAutoPlay && <span>Auto playing</span>}
+
+      <span>
         Time:
         {` ${minutes}:${seconds}`}
       </span>
