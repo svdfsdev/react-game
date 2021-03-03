@@ -112,6 +112,7 @@ const Game = (props) => {
       />
 
       <GameBoard
+        isAutoPlay={true}
         score={score}
         isPlaying={isPlaying}
         isGameOver={isGameOver}

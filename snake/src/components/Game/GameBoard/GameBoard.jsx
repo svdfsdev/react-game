@@ -20,6 +20,7 @@ export const GameBoard = ({
   level,
   border,
   startStop,
+  isAutoPlay,
   isPlaying,
   isGameOver,
   scoreHandler,
@@ -196,7 +197,40 @@ export const GameBoard = ({
     }
   }, [isEatYourself, finishGame]);
 
+  const autoPlay = useCallback(() => {
+    let dir = direction;
+
+    switch (true) {
+      case prey.x !== snakeHeadX:
+        dir = prey.x < snakeHeadX ? DIRECTION_LEFT : DIRECTION_RIGHT;
+        break;
+
+      case prey.x === snakeHeadX:
+        dir = prey.y < snakeHeadY ? DIRECTION_UP : DIRECTION_DOWN;
+        break;
+
+      case prey.y !== snakeHeadY:
+        dir = prey.y < snakeHeadY ? DIRECTION_UP : DIRECTION_DOWN;
+        break;
+
+      case prey.y === snakeHeadY:
+        dir = prey.x < snakeHeadX ? DIRECTION_LEFT : DIRECTION_RIGHT;
+        break;
+
+      default:
+        break;
+    }
+
+    if (!validateDirection(dir)) {
+      setDirection(dir);
+    }
+  }, [prey.x, prey.y, snakeHeadY, snakeHeadX, direction, validateDirection]);
+
   const drawGame = useCallback(() => {
+    if (isAutoPlay) {
+      autoPlay();
+    }
+
     changeSnakeHeadPosition();
     changeSnakeHead();
 
@@ -210,6 +244,8 @@ export const GameBoard = ({
 
     eatPrey();
   }, [
+    isAutoPlay,
+    autoPlay,
     border,
     finishGame,
     isSnakeHitWall,
@@ -244,7 +280,7 @@ export const GameBoard = ({
     return () => {
       document.removeEventListener('keydown', changeDirection);
     };
-  }, [changeDirection]);
+  }, [isAutoPlay, changeDirection]);
 
   const renderSnake = useCallback(
     () =>
