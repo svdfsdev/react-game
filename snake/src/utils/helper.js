@@ -16,3 +16,23 @@ export function initGameboard() {
 
   return box > 25 ? 25 : box;
 }
+
+export function fullScreenOpen(app) {
+  if (app.requestFullscreen) {
+    app.requestFullscreen();
+  } else if (app.webkitrequestFullscreen) {
+    app.webkitRequestFullscreen();
+  } else if (app.mozRequestFullscreen) {
+    app.mozRequestFullScreen();
+  }
+}
+
+export function fullScreenCancel() {
+  if (document.cancelFullScreen) {
+    document.cancelFullScreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitCancelFullScreen) {
+    document.webkitCancelFullScreen();
+  }
+}

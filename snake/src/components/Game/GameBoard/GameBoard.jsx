@@ -111,8 +111,6 @@ export const GameBoard = ({
   );
 
   const initGame = useCallback(() => {
-    console.log('init game');
-
     setPrey({
       x: getRandomNumber(GAMEBOARD_WIDTH, box),
       y: getRandomNumber(GAMEBOARD_HEIGHT, box),

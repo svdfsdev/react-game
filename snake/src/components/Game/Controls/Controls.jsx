@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Controls.scss';
 import { Button } from 'react-bootstrap';
+import { fullScreenOpen, fullScreenCancel } from '../../../utils/helper';
 
 export const Controls = ({
   resetGame,
   isPlaying,
   isGameOver,
   startStopGame,
-  setFullScreen,
 }) => {
+  const app = useRef();
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const classes = ['Controls'];
 
   if (isGameOver) {
@@ -30,9 +32,23 @@ export const Controls = ({
     variant: 'primary',
   };
 
+  useEffect(() => {
+    app.current = document.querySelector('.App');
+  });
+
+  const fullScreenHandler = () => {
+    if (isFullScreen) {
+      fullScreenCancel();
+    } else {
+      fullScreenOpen(app.current);
+    }
+
+    setIsFullScreen((prev) => !prev);
+  };
+
   return (
     <div className={classes.join(' ')}>
-      <Button variant={fullScreenBtn.variant} onClick={setFullScreen}>
+      <Button variant={fullScreenBtn.variant} onClick={fullScreenHandler}>
         {fullScreenBtn.label}
       </Button>
 
