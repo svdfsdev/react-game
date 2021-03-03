@@ -46,7 +46,7 @@ export const Progress = ({
     <div className={classes.join(' ')}>
       <span>Score: {score}</span>
 
-      {isAutoPlay && <span>Auto playing</span>}
+      {isAutoPlay && <span className="autoplay">Auto playing</span>}
 
       <span>
         Time:

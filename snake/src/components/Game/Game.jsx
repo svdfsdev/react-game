@@ -9,6 +9,7 @@ import { saveStatistics } from '../../actions/statisticsActions';
 import { levelsList } from '../../utils/guide';
 import AudioEffects from './AudioEffects';
 import { initGameboard } from '../../utils/helper';
+import { turnOnOffBorder } from '../../actions/settingsActions';
 
 const Game = (props) => {
   const [timer, setTimer] = useState(0);
@@ -22,7 +23,7 @@ const Game = (props) => {
   const [box, setBox] = useState(0);
 
   const { gameLevel, gameBorder, gameBoard, gamePrey } = props.settings;
-  const { saveStatistics } = props;
+  const { saveStatistics, turnOnOffBorder } = props;
 
   useEffect(() => {
     if (box === 0) {
@@ -74,6 +75,10 @@ const Game = (props) => {
   }, []);
 
   const autoPlayHandler = () => {
+    if (gameBorder) {
+      turnOnOffBorder();
+    }
+
     setIsAutoPlay((prev) => !prev);
   };
 
@@ -152,6 +157,7 @@ const mapStateToProps = (store) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   saveStatistics: (game) => dispatch(saveStatistics(game)),
+  turnOnOffBorder: () => dispatch(turnOnOffBorder()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

@@ -85,7 +85,7 @@ export const GameBoard = ({
     [direction]
   );
 
-  const changeDirection = useCallback(
+  const manageDirection = useCallback(
     (e) => {
       if (isSnakeHeadOutsideGameboard) return;
 
@@ -208,6 +208,14 @@ export const GameBoard = ({
       dir = prey.y < snakeHeadY ? DIRECTION_UP : DIRECTION_DOWN;
     }
 
+    function changeDirection() {
+      if (dir === DIRECTION_LEFT || dir === DIRECTION_RIGHT) {
+        upDownDirection();
+      } else {
+        leftRightDirection();
+      }
+    }
+
     switch (true) {
       case prey.y === snakeHeadY:
         leftRightDirection();
@@ -229,9 +237,11 @@ export const GameBoard = ({
         break;
     }
 
-    if (!validateDirection(dir)) {
-      setDirection(dir);
+    if (validateDirection(dir)) {
+      changeDirection();
     }
+
+    setDirection(dir);
   }, [prey.x, prey.y, snakeHeadY, snakeHeadX, direction, validateDirection]);
 
   const drawGame = useCallback(() => {
@@ -283,12 +293,12 @@ export const GameBoard = ({
   }, [isPlaying, level, drawGame]);
 
   useEffect(() => {
-    document.addEventListener('keydown', changeDirection);
+    document.addEventListener('keydown', manageDirection);
 
     return () => {
-      document.removeEventListener('keydown', changeDirection);
+      document.removeEventListener('keydown', manageDirection);
     };
-  }, [isAutoPlay, changeDirection]);
+  }, [isAutoPlay, manageDirection]);
 
   const renderSnake = useCallback(
     () =>
