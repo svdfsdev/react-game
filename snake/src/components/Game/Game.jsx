@@ -8,6 +8,7 @@ import { Result } from './Result/Result';
 import { saveStatistics } from '../../actions/statisticsActions';
 import { levelsList } from '../../utils/guide';
 import AudioEffects from './AudioEffects';
+import { initGameboard } from '../../utils/helper';
 
 const Game = (props) => {
   const [timer, setTimer] = useState(0);
@@ -17,8 +18,16 @@ const Game = (props) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isShowResult, setIsShowResult] = useState(false);
 
+  const [box, setBox] = useState(0);
+
   const { gameLevel, gameBorder, gameBoard, gamePrey } = props.settings;
   const { saveStatistics } = props;
+
+  useEffect(() => {
+    if (box === 0) {
+      setBox(initGameboard());
+    }
+  }, [box]);
 
   const newGame = useCallback(() => {
     setScore(0);
@@ -99,6 +108,7 @@ const Game = (props) => {
         isShowResult={isShowResult}
         isGameOver={isGameOver}
         newGame={newGame}
+        box={box}
       />
 
       <GameBoard
@@ -112,6 +122,7 @@ const Game = (props) => {
         startStop={startStopGame}
         gameBoard={gameBoard}
         gamePrey={gamePrey}
+        box={box}
       />
 
       {!isShowResult && (

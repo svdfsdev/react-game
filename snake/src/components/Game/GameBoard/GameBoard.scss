@@ -1,6 +1,4 @@
 .GameBoard {
-  width: 750px;
-  height: 450px;
   z-index: 10;
   position: absolute;
   top: 0;
@@ -9,18 +7,15 @@
   right: 0;
   margin: auto;
   overflow: hidden;
-  transition: 0.5s;
   box-sizing: content-box;
 
   &.border {
-    border: 1.5vh solid rgb(32, 32, 32) !important;
+    border: 10px solid rgb(32, 32, 32) !important;
     border-radius: 8px;
   }
 
   .Snake {
     position: absolute;
-    width: 25px;
-    height: 25px;
     background: lightsalmon;
   }
 }

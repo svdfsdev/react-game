@@ -16,7 +16,7 @@ const initialState = {
   soundOn: true,
   soundVolume: 1,
 
-  gameBorder: true,
+  gameBorder: false,
   gameBoard: 0,
   gamePrey: 0,
   gameLevel: 0,

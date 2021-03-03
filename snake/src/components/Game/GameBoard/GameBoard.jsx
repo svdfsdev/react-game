@@ -1,4 +1,10 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  useRef,
+} from 'react';
 import './GameBoard.scss';
 import {
   DIRECTION_DOWN,
@@ -15,11 +21,8 @@ import { getRandomNumber } from '../../../utils/helper';
 import { Prey } from './Prey/Prey';
 import { GameboardBkg } from './GameboardBkg/GameboardBkg';
 
-const BOTTOM_BORDER = 450;
-const RIGHT_BORDER = 750;
-const BOX = 25;
-
 export const GameBoard = ({
+  box,
   level,
   border,
   startStop,
@@ -36,23 +39,33 @@ export const GameBoard = ({
   const [snake, setSnake] = useState([{ x: null, y: null }]);
   const [direction, setDirection] = useState();
 
+  const RIGHT_BORDER = useMemo(() => {
+    return box * 30;
+  }, [box]);
+
+  const BOTTOM_BORDER = useMemo(() => {
+    return box * 18;
+  }, [box]);
+
+  const gameBoardSnake = useRef();
+
   const isSnakeHeadOutsideGameboard = useMemo(() => {
     return (
       snakeHeadX < LEFT_BORDER ||
-      snakeHeadX >= 750 ||
+      snakeHeadX >= RIGHT_BORDER ||
       snakeHeadY < TOP_BORDER ||
-      snakeHeadY >= 450
+      snakeHeadY >= BOTTOM_BORDER
     );
-  }, [snakeHeadX, snakeHeadY]);
+  }, [snakeHeadX, snakeHeadY, RIGHT_BORDER, BOTTOM_BORDER]);
 
   const isSnakeHitWall = useMemo(() => {
     return (
-      snakeHeadX === LEFT_BORDER - BOX ||
-      snakeHeadY === TOP_BORDER - BOX ||
-      snakeHeadX === RIGHT_BORDER + BOX ||
-      snakeHeadY === BOTTOM_BORDER + BOX
+      snakeHeadX === LEFT_BORDER - box ||
+      snakeHeadY === TOP_BORDER - box ||
+      snakeHeadX === RIGHT_BORDER + box ||
+      snakeHeadY === BOTTOM_BORDER + box
     );
-  }, [snakeHeadX, snakeHeadY]);
+  }, [snakeHeadX, snakeHeadY, box, RIGHT_BORDER, BOTTOM_BORDER]);
 
   const isEatYourself = useMemo(() => {
     let isEat = false;
@@ -107,14 +120,15 @@ export const GameBoard = ({
 
   const initGame = useCallback(() => {
     setPrey({
-      x: getRandomNumber(GAMEBOARD_WIDTH, BOX),
-      y: getRandomNumber(GAMEBOARD_HEIGHT, BOX),
+      x: getRandomNumber(GAMEBOARD_WIDTH, box),
+      y: getRandomNumber(GAMEBOARD_HEIGHT, box),
     });
+
     setSnake([{ x: RIGHT_BORDER / 2, y: BOTTOM_BORDER / 2 }]);
     setSnakeHeadX(RIGHT_BORDER / 2);
-    setSnakeHeadY(BOTTOM_BORDER / 2);
+    setSnakeHeadY(RIGHT_BORDER / 2);
     setDirection(DIRECTION_RIGHT);
-  }, []);
+  }, [box, RIGHT_BORDER, BOTTOM_BORDER]);
 
   const eatPrey = useCallback(() => {
     if (prey.x === snakeHeadX && prey.y === snakeHeadY) {
@@ -123,56 +137,56 @@ export const GameBoard = ({
 
       setSnake(currentSnake);
       setPrey({
-        x: getRandomNumber(GAMEBOARD_WIDTH, BOX),
-        y: getRandomNumber(GAMEBOARD_HEIGHT, BOX),
+        x: getRandomNumber(GAMEBOARD_WIDTH, box),
+        y: getRandomNumber(GAMEBOARD_HEIGHT, box),
       });
     }
-  }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler]);
+  }, [snake, prey.x, prey.y, snakeHeadX, snakeHeadY, scoreHandler, box]);
 
   const crossBorder = useCallback(() => {
-    if (snakeHeadX < LEFT_BORDER - BOX) {
-      setSnakeHeadX(750);
+    if (snakeHeadX < LEFT_BORDER - box) {
+      setSnakeHeadX(RIGHT_BORDER);
       return;
     }
 
-    if (snakeHeadX > 750) {
+    if (snakeHeadX > RIGHT_BORDER) {
       setSnakeHeadX(LEFT_BORDER);
       return;
     }
 
-    if (snakeHeadY < TOP_BORDER - BOX) {
-      setSnakeHeadY(450);
+    if (snakeHeadY < TOP_BORDER - box) {
+      setSnakeHeadY(BOTTOM_BORDER);
       return;
     }
 
-    if (snakeHeadY > 450) {
+    if (snakeHeadY > BOTTOM_BORDER) {
       setSnakeHeadY(TOP_BORDER);
       return;
     }
-  }, [snakeHeadX, snakeHeadY]);
+  }, [snakeHeadX, snakeHeadY, box, RIGHT_BORDER, BOTTOM_BORDER]);
 
   const changeSnakeHeadPosition = useCallback(() => {
     switch (direction) {
       case DIRECTION_LEFT:
-        setSnakeHeadX((prev) => prev - BOX);
+        setSnakeHeadX((prev) => prev - box);
         return;
 
       case DIRECTION_UP:
-        setSnakeHeadY((prev) => prev - BOX);
+        setSnakeHeadY((prev) => prev - box);
         return;
 
       case DIRECTION_RIGHT:
-        setSnakeHeadX((prev) => prev + BOX);
+        setSnakeHeadX((prev) => prev + box);
         return;
 
       case DIRECTION_DOWN:
-        setSnakeHeadY((prev) => prev + BOX);
+        setSnakeHeadY((prev) => prev + box);
         return;
 
       default:
         return;
     }
-  }, [direction]);
+  }, [direction, box]);
 
   const changeSnakeHead = useCallback(() => {
     const currentSnake = [
@@ -248,10 +262,12 @@ export const GameBoard = ({
           style={{
             left: `${it.x}px`,
             top: `${it.y}px`,
+            width: box + 'px',
+            height: box + 'px',
           }}
         ></div>
       )),
-    [snake]
+    [snake, box]
   );
 
   const gameBoardClasses = useMemo(() => {
@@ -265,10 +281,14 @@ export const GameBoard = ({
   }, [border]);
 
   return (
-    <div className={gameBoardClasses}>
+    <div
+      className={gameBoardClasses}
+      ref={gameBoardSnake}
+      style={{ width: RIGHT_BORDER, height: BOTTOM_BORDER }}
+    >
       <GameboardBkg bkg={gameBoard} />
 
-      <Prey x={prey.x} y={prey.y} gamePrey={gamePrey} />
+      <Prey x={prey.x} y={prey.y} box={box} gamePrey={gamePrey} />
 
       {renderSnake()}
     </div>

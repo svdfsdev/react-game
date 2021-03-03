@@ -3,7 +3,7 @@ import { getDisplayValue } from '../../../utils/helper';
 import { Button } from 'react-bootstrap';
 import './Result.scss';
 
-export const Result = ({ score, timer, isShowResult, newGame }) => {
+export const Result = ({ box, score, timer, isShowResult, newGame }) => {
   const minutes = getDisplayValue(Math.trunc(timer / 60));
   const seconds = getDisplayValue(timer % 60);
 
@@ -19,7 +19,13 @@ export const Result = ({ score, timer, isShowResult, newGame }) => {
   };
 
   return (
-    <div className={classes.join(' ')}>
+    <div
+      className={classes.join(' ')}
+      style={{
+        width: box * 30 + 'px',
+        height: box * 18 + 'px',
+      }}
+    >
       <span className="game-over">Game over!</span>
       <span className="score">Score: {score}</span>
       <span className="time">
