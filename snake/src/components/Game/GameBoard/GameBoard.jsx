@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useMemo,
-  useEffect,
-  useCallback,
-  useRef,
-} from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import './GameBoard.scss';
 import {
   DIRECTION_DOWN,
@@ -33,21 +27,19 @@ export const GameBoard = ({
   gameBoard,
   gamePrey,
 }) => {
-  const [snakeHeadX, setSnakeHeadX] = useState();
-  const [snakeHeadY, setSnakeHeadY] = useState();
+  const [snakeHeadX, setSnakeHeadX] = useState(0);
+  const [snakeHeadY, setSnakeHeadY] = useState(0);
   const [prey, setPrey] = useState({ x: null, y: null });
   const [snake, setSnake] = useState([{ x: null, y: null }]);
   const [direction, setDirection] = useState();
 
   const RIGHT_BORDER = useMemo(() => {
-    return box * 30;
+    return box * GAMEBOARD_WIDTH;
   }, [box]);
 
   const BOTTOM_BORDER = useMemo(() => {
-    return box * 18;
+    return box * GAMEBOARD_HEIGHT;
   }, [box]);
-
-  const gameBoardSnake = useRef();
 
   const isSnakeHeadOutsideGameboard = useMemo(() => {
     return (
@@ -119,14 +111,17 @@ export const GameBoard = ({
   );
 
   const initGame = useCallback(() => {
+    console.log('init game');
+
     setPrey({
       x: getRandomNumber(GAMEBOARD_WIDTH, box),
       y: getRandomNumber(GAMEBOARD_HEIGHT, box),
     });
 
-    setSnake([{ x: RIGHT_BORDER / 2, y: BOTTOM_BORDER / 2 }]);
     setSnakeHeadX(RIGHT_BORDER / 2);
-    setSnakeHeadY(RIGHT_BORDER / 2);
+    setSnakeHeadY(BOTTOM_BORDER / 2);
+
+    setSnake([{ x: RIGHT_BORDER / 2, y: BOTTOM_BORDER / 2 }]);
     setDirection(DIRECTION_RIGHT);
   }, [box, RIGHT_BORDER, BOTTOM_BORDER]);
 
@@ -283,7 +278,6 @@ export const GameBoard = ({
   return (
     <div
       className={gameBoardClasses}
-      ref={gameBoardSnake}
       style={{ width: RIGHT_BORDER, height: BOTTOM_BORDER }}
     >
       <GameboardBkg bkg={gameBoard} />
