@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './Controls.scss';
 import { Button } from 'react-bootstrap';
 import { fullScreenOpen, fullScreenCancel } from '../../../utils/helper';
@@ -11,7 +11,6 @@ export const Controls = ({
   autoPlayHandler,
 }) => {
   const app = useRef();
-  const [isFullScreen, setIsFullScreen] = useState(false);
   const classes = ['Controls'];
 
   if (isGameOver) {
@@ -43,13 +42,11 @@ export const Controls = ({
   });
 
   const fullScreenHandler = () => {
-    if (isFullScreen) {
+    if (document.fullscreenElement) {
       fullScreenCancel();
     } else {
       fullScreenOpen(app.current);
     }
-
-    setIsFullScreen((prev) => !prev);
   };
 
   return (

@@ -8,6 +8,12 @@ import Settings from './components/Settings/Settings';
 import Statistics from './components/Statistics/Statistics';
 import { unfocusButton } from './utils/helper';
 
+// window.onbeforeunload = function () {
+//   console.log('close');
+
+//   return 'Есть несохранённые изменения. Всё равно уходим?';
+// };
+
 function App() {
   useEffect(() => {
     const btns = document.querySelectorAll('button');
@@ -22,13 +28,9 @@ function App() {
   return (
     <div className="App">
       <Header />
-
       <Route path="/statistics" component={Statistics} />
-
       <Route path="/settings" component={Settings} />
-
       <Route path="/" exact component={Game} />
-
       <Footer />
     </div>
   );
