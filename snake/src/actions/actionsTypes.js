@@ -8,9 +8,6 @@ export const SET_PREY_IMG = 'SET_PREY_IMG';
 export const SET_BORDER = 'SET_BORDER';
 export const SET_LEVEL = 'SET_LEVEL';
 
-// Game
-export const PLAY_GAME = 'PLAY_GAME';
-export const SET_FULL_SCREEN = 'SET_FULL_SCREEN';
-
 // Statistics
 export const SAVE_STATISTICS = 'SAVE_STATISTICS';
+export const SAVE_PLAYER = 'SAVE_PLAYER';

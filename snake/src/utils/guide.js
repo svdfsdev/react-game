@@ -19,3 +19,5 @@ export const TOP_BORDER = 0;
 
 export const GAMEBOARD_WIDTH = 30;
 export const GAMEBOARD_HEIGHT = 18;
+
+export const url = 'https://morning-brook-85221.herokuapp.com';

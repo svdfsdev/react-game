@@ -5,7 +5,7 @@ import { Progress } from './Progress/Progress';
 import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 import { Result } from './Result/Result';
-import { saveStatistics } from '../../actions/statisticsActions';
+import { setStatistics } from '../../actions/statisticsActions';
 import { levelsList } from '../../utils/guide';
 import AudioEffects from './AudioEffects';
 import { initGameboard } from '../../utils/helper';
@@ -23,7 +23,7 @@ const Game = (props) => {
   const [box, setBox] = useState(0);
 
   const { gameLevel, gameBorder, gameBoard, gamePrey } = props.settings;
-  const { saveStatistics, turnOnOffBorder } = props;
+  const { setStatistics, turnOnOffBorder } = props;
 
   useEffect(() => {
     if (box === 0) {
@@ -90,9 +90,9 @@ const Game = (props) => {
 
   useEffect(() => {
     if (isGameOver && isShowResult && timer > 0) {
-      saveStatistics({ score, timer });
+      setStatistics({ score, timer });
     }
-  }, [isGameOver, isShowResult, score, timer, saveStatistics]);
+  }, [isGameOver, isShowResult, score, timer, setStatistics]);
 
   return (
     <div className="Game">
@@ -156,7 +156,7 @@ const mapStateToProps = (store) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  saveStatistics: (game) => dispatch(saveStatistics(game)),
+  setStatistics: (game) => dispatch(setStatistics(game)),
   turnOnOffBorder: () => dispatch(turnOnOffBorder()),
 });
 
