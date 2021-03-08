@@ -1,15 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { turnOnOffBorder } from '../../actions/settingsActions';
+import { setStatistics } from '../../actions/statisticsActions';
+import { initGameboard } from '../../utils/helper';
+import { levelsList } from '../../utils/guide';
 import './Game.scss';
 import { Progress } from './Progress/Progress';
 import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 import { Result } from './Result/Result';
-import { setStatistics } from '../../actions/statisticsActions';
-import { levelsList } from '../../utils/guide';
 import AudioEffects from './AudioEffects';
-import { initGameboard } from '../../utils/helper';
-import { turnOnOffBorder } from '../../actions/settingsActions';
 
 const Game = (props) => {
   const [timer, setTimer] = useState(0);

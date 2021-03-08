@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { unfocusButton } from './utils/helper';
 import './App.scss';
 import { Footer } from './components/Footer/Footer';
 import Game from './components/Game/Game';
@@ -7,14 +9,6 @@ import Header from './components/Header/Header';
 import Registration from './components/Registration/Registration';
 import Settings from './components/Settings/Settings';
 import Statistics from './components/Statistics/Statistics';
-import { unfocusButton } from './utils/helper';
-import { connect } from 'react-redux';
-
-// window.onbeforeunload = function () {
-//   console.log('close');
-
-//   return 'Есть несохранённые изменения. Всё равно уходим?';
-// };
 
 function App(props) {
   const { player } = props.statistics;
@@ -40,6 +34,8 @@ function App(props) {
       ) : (
         <Route path="/" exact component={Registration} />
       )}
+
+      <Redirect to="/" component={Game} />
 
       <Footer />
     </div>

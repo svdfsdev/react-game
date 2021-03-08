@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { setPlayer } from '../../actions/statisticsActions';
-import { Form, Button } from 'react-bootstrap';
 import './Registration.scss';
+import { Form, Button } from 'react-bootstrap';
 
 const Registration = (props) => {
   const [name, setName] = useState('');

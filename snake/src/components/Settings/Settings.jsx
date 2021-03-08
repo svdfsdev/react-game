@@ -1,5 +1,4 @@
 import React from 'react';
-import './Settings.scss';
 import { connect } from 'react-redux';
 import {
   turnOnOffBorder,
@@ -12,6 +11,7 @@ import {
   setSoundVolume,
 } from '../../actions/settingsActions';
 import { levelsList, gameboard_bkg, prey_bkg } from '../../utils/guide';
+import './Settings.scss';
 import { Form } from 'react-bootstrap';
 
 const Settings = (props) => {

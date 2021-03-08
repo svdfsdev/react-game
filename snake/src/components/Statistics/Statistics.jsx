@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './Statistics.scss';
 import { getDisplayValue } from '../../utils/helper';
+import './Statistics.scss';
 import { Table } from 'react-bootstrap';
 
 const Statistics = ({ statistics }) => {

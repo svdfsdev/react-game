@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import './GameBoard.scss';
+import { getRandomNumber } from '../../../utils/helper';
 import {
   DIRECTION_DOWN,
   DIRECTION_LEFT,
@@ -11,7 +11,7 @@ import {
   START_STOP_GAME,
   TOP_BORDER,
 } from '../../../utils/guide';
-import { getRandomNumber } from '../../../utils/helper';
+import './GameBoard.scss';
 import { Prey } from './Prey/Prey';
 import { GameboardBkg } from './GameboardBkg/GameboardBkg';
 

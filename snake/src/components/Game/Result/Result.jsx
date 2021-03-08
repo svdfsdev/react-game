@@ -1,7 +1,7 @@
 import React from 'react';
 import { getDisplayValue } from '../../../utils/helper';
-import { Button } from 'react-bootstrap';
 import './Result.scss';
+import { Button } from 'react-bootstrap';
 
 export const Result = ({ box, score, timer, isShowResult, newGame }) => {
   const minutes = getDisplayValue(Math.trunc(timer / 60));
