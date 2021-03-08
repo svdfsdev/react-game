@@ -1,17 +1,16 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { turnOnOffBorder } from '../../actions/settingsActions';
-import { setStatistics } from '../../actions/statisticsActions';
-import { initGameboard } from '../../utils/helper';
+import { useSelector, useDispatch } from 'react-redux';
+import { initGameboard, saveStatistics } from '../../utils/helper';
 import { levelsList } from '../../utils/guide';
 import './Game.scss';
 import { Progress } from './Progress/Progress';
 import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 import { Result } from './Result/Result';
-import AudioEffects from './AudioEffects';
+import { AudioEffects } from './AudioEffects';
+import { SAVE_STATISTICS, SET_BORDER } from '../../actions/actionsTypes';
 
-const Game = (props) => {
+export const Game = () => {
   const [timer, setTimer] = useState(0);
   const [score, setScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -22,8 +21,12 @@ const Game = (props) => {
 
   const [box, setBox] = useState(0);
 
-  const { gameLevel, gameBorder, gameBoard, gamePrey } = props.settings;
-  const { setStatistics, turnOnOffBorder } = props;
+  const gameLevel = useSelector((state) => state.settings.gameLevel);
+  const gameBorder = useSelector((state) => state.settings.gameBorder);
+  const gameBoard = useSelector((state) => state.settings.gameBoard);
+  const gamePrey = useSelector((state) => state.settings.gamePrey);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (box === 0) {
@@ -76,7 +79,9 @@ const Game = (props) => {
 
   const autoPlayHandler = () => {
     if (gameBorder) {
-      turnOnOffBorder();
+      dispatch({
+        type: SET_BORDER,
+      });
     }
 
     setIsAutoPlay((prev) => !prev);
@@ -90,9 +95,15 @@ const Game = (props) => {
 
   useEffect(() => {
     if (isGameOver && isShowResult && timer > 0) {
-      setStatistics({ score, timer });
+      const game = { score, timer };
+
+      saveStatistics(game);
+      dispatch({
+        type: SAVE_STATISTICS,
+        payload: game,
+      });
     }
-  }, [isGameOver, isShowResult, score, timer, setStatistics]);
+  }, [isGameOver, isShowResult, score, timer, dispatch]);
 
   return (
     <div className="Game">
@@ -150,14 +161,3 @@ const Game = (props) => {
     </div>
   );
 };
-
-const mapStateToProps = (store) => ({
-  settings: store.settings,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setStatistics: (game) => dispatch(setStatistics(game)),
-  turnOnOffBorder: () => dispatch(turnOnOffBorder()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Game);

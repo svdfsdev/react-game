@@ -1,40 +1,58 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import {
-  turnOnOffBorder,
-  setLevel,
-  turnOnOffMusic,
-  turnOnOffSound,
-  setGameboardBkg,
-  setPreyImg,
-  setMusicVolume,
-  setSoundVolume,
-} from '../../actions/settingsActions';
+import { useSelector, useDispatch } from 'react-redux';
 import { levelsList, gameboard_bkg, prey_bkg } from '../../utils/guide';
 import './Settings.scss';
 import { Form } from 'react-bootstrap';
+import {
+  SET_BORDER,
+  SET_GAMEBOARD_BKG,
+  SET_LEVEL,
+  SET_MUSIC_ON_OFF,
+  SET_MUSIC_VOLUME,
+  SET_PREY_IMG,
+  SET_SOUND_ON_OFF,
+  SET_SOUND_VOLUME,
+} from '../../actions/actionsTypes';
 
-const Settings = (props) => {
-  const {
-    gameBorder,
-    gameLevel,
-    gameBoard,
-    gamePrey,
-    musicOn,
-    musicVolume,
-    soundOn,
-    soundVolume,
-  } = props.settings;
-  const {
-    turnOnOffBorder,
-    setLevel,
-    setGameboardBkg,
-    setPreyImg,
-    turnOnOffMusic,
-    setMusicVolume,
-    turnOnOffSound,
-    setSoundVolume,
-  } = props;
+export const Settings = () => {
+  const dispatch = useDispatch();
+  const settings = useSelector((state) => state.settings);
+
+  const turnOnOffBorderHandler = () => dispatch({ type: SET_BORDER });
+
+  const turnOnOffMusicHandler = () => dispatch({ type: SET_MUSIC_ON_OFF });
+
+  const setMusicVolumeHandler = (volume) =>
+    dispatch({
+      type: SET_MUSIC_VOLUME,
+      payload: volume,
+    });
+
+  const turnOnOffSoundHandler = () => dispatch({ type: SET_SOUND_ON_OFF });
+
+  const setSoundVolumeHandler = (volume) =>
+    dispatch({
+      type: SET_SOUND_VOLUME,
+      payload: volume,
+    });
+
+  const setGameLevelHandler = (level) =>
+    dispatch({
+      type: SET_LEVEL,
+      payload: level,
+    });
+
+  const setGameboardBkgHandler = (img) =>
+    dispatch({
+      type: SET_GAMEBOARD_BKG,
+      payload: img,
+    });
+
+  const setPreyImgHandler = (img) =>
+    dispatch({
+      type: SET_PREY_IMG,
+      payload: img,
+    });
 
   return (
     <div className="Settings">
@@ -45,8 +63,8 @@ const Settings = (props) => {
           type="switch"
           id="custom-switch-border"
           label="Border"
-          checked={gameBorder}
-          onChange={turnOnOffBorder}
+          checked={settings.gameBorder}
+          onChange={turnOnOffBorderHandler}
         />
 
         <hr />
@@ -55,16 +73,16 @@ const Settings = (props) => {
           type="switch"
           id="custom-switch-music"
           label="Music"
-          checked={musicOn}
-          onChange={turnOnOffMusic}
+          checked={settings.musicOn}
+          onChange={turnOnOffMusicHandler}
         />
 
         <Form.Group
           controlId="music-volume"
-          onChange={(e) => setMusicVolume(+e.target.value)}
+          onChange={(e) => setMusicVolumeHandler(+e.target.value)}
         >
           <Form.Label>Music volume</Form.Label>
-          <Form.Control type="range" defaultValue={musicVolume} />
+          <Form.Control type="range" defaultValue={settings.musicVolume} />
         </Form.Group>
 
         <hr />
@@ -73,26 +91,31 @@ const Settings = (props) => {
           type="switch"
           id="custom-switch-sound"
           label="Sound"
-          checked={soundOn}
-          onChange={turnOnOffSound}
+          checked={settings.soundOn}
+          onChange={turnOnOffSoundHandler}
         />
 
         <Form.Group
           controlId="sound-volume"
-          onChange={(e) => setSoundVolume(+e.target.value)}
+          onChange={(e) => setSoundVolumeHandler(+e.target.value)}
         >
           <Form.Label>Sound volume</Form.Label>
-          <Form.Control type="range" defaultValue={soundVolume} />
+          <Form.Control type="range" defaultValue={settings.soundVolume} />
         </Form.Group>
 
         <hr />
 
         <Form.Group
-          onChange={(e) => setLevel(e.target.value)}
+          onChange={(e) => setGameLevelHandler(e.target.value)}
           controlId="exampleForm.SelectCustomSizeSm"
         >
           <Form.Label>Game difficulty</Form.Label>
-          <Form.Control as="select" size="sm" custom defaultValue={gameLevel}>
+          <Form.Control
+            as="select"
+            size="sm"
+            custom
+            defaultValue={settings.gameLevel}
+          >
             {levelsList.map((it, i) => {
               return (
                 <option value={i} key={i}>
@@ -106,11 +129,16 @@ const Settings = (props) => {
         <hr />
 
         <Form.Group
-          onChange={(e) => setGameboardBkg(e.target.value)}
+          onChange={(e) => setGameboardBkgHandler(e.target.value)}
           controlId="exampleForm.SelectCustomSizeSm"
         >
           <Form.Label>Gameboard background</Form.Label>
-          <Form.Control as="select" size="sm" custom defaultValue={gameBoard}>
+          <Form.Control
+            as="select"
+            size="sm"
+            custom
+            defaultValue={settings.gameBoard}
+          >
             {gameboard_bkg.map((it, i) => {
               return (
                 <option value={i} key={i}>
@@ -124,11 +152,16 @@ const Settings = (props) => {
         <hr />
 
         <Form.Group
-          onChange={(e) => setPreyImg(e.target.value)}
+          onChange={(e) => setPreyImgHandler(e.target.value)}
           controlId="exampleForm.SelectCustomSizeSm"
         >
           <Form.Label>Prey image</Form.Label>
-          <Form.Control as="select" size="sm" custom defaultValue={gamePrey}>
+          <Form.Control
+            as="select"
+            size="sm"
+            custom
+            defaultValue={settings.gamePrey}
+          >
             {prey_bkg.map((it, i) => {
               return (
                 <option value={i} key={i}>
@@ -142,20 +175,3 @@ const Settings = (props) => {
     </div>
   );
 };
-
-const mapStateToProps = (store) => ({
-  settings: store.settings,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  turnOnOffBorder: () => dispatch(turnOnOffBorder()),
-  setLevel: (level) => dispatch(setLevel(level)),
-  setGameboardBkg: (img) => dispatch(setGameboardBkg(img)),
-  setPreyImg: (img) => dispatch(setPreyImg(img)),
-  turnOnOffMusic: () => dispatch(turnOnOffMusic()),
-  setMusicVolume: (volume) => dispatch(setMusicVolume(volume)),
-  turnOnOffSound: () => dispatch(turnOnOffSound()),
-  setSoundVolume: (volume) => dispatch(setSoundVolume(volume)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);

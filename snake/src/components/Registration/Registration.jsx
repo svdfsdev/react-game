@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { setPlayer } from '../../actions/statisticsActions';
+import { useDispatch } from 'react-redux';
+import { SAVE_PLAYER } from '../../actions/actionsTypes';
+import { savePlayer } from '../../utils/helper';
 import './Registration.scss';
 import { Form, Button } from 'react-bootstrap';
 
-const Registration = (props) => {
+export const Registration = () => {
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
-  const { setPlayer } = props;
 
-  const saveNameHandler = () => {
-    setPlayer(name.trim());
+  const savePlayerNameHandler = () => {
+    if (name.trim()) {
+      savePlayer(name);
+
+      dispatch({
+        type: SAVE_PLAYER,
+        payload: name,
+      });
+    }
   };
 
   return (
     <div className="Registration">
       <h2>Hello!</h2>
 
-      <Form onSubmit={saveNameHandler}>
+      <Form onSubmit={savePlayerNameHandler}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Input your name</Form.Label>
           <Form.Control
@@ -28,7 +36,7 @@ const Registration = (props) => {
           <Form.Text className="text-muted">
             Necessary for statistics storage
           </Form.Text>
-          <Button variant="secondary" onClick={saveNameHandler}>
+          <Button variant="secondary" onClick={savePlayerNameHandler}>
             Let's play
           </Button>
         </Form.Group>
@@ -36,13 +44,3 @@ const Registration = (props) => {
     </div>
   );
 };
-
-const mapStateToProps = (store) => ({
-  statistics: store.statistics,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setPlayer: (name) => dispatch(setPlayer(name)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Registration);

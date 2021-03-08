@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { unfocusButton } from './utils/helper';
 import './App.scss';
-import { Footer } from './components/Footer/Footer';
-import Game from './components/Game/Game';
 import Header from './components/Header/Header';
-import Registration from './components/Registration/Registration';
-import Settings from './components/Settings/Settings';
-import Statistics from './components/Statistics/Statistics';
+import { Footer } from './components/Footer/Footer';
+import { Game } from './components/Game/Game';
+import { Settings } from './components/Settings/Settings';
+import { Registration } from './components/Registration/Registration';
+import { Statistics } from './components/Statistics/Statistics';
 
-function App(props) {
-  const { player } = props.statistics;
+export function App() {
+  const player = useSelector((state) => state.statistics.player);
 
   useEffect(() => {
     const btns = document.querySelectorAll('button');
@@ -41,9 +41,3 @@ function App(props) {
     </div>
   );
 }
-
-const mapStateToProps = (store) => ({
-  statistics: store.statistics,
-});
-
-export default connect(mapStateToProps)(App);

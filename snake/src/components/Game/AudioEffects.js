@@ -1,11 +1,12 @@
 import { useEffect, useMemo } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import dd from '../../assets/audio/dd.mp3';
 import final from '../../assets/audio/final.mp3';
 import eat from '../../assets/audio/eat.mp3';
 
-const AudioEffects = (props) => {
-  const { isPlaying, isShowResult, score, settings } = props;
+export const AudioEffects = (props) => {
+  const settings = useSelector((state) => state.settings);
+  const { isPlaying, isShowResult, score } = props;
   const { musicOn, musicVolume, soundOn, soundVolume } = settings;
 
   const gameMusic = useMemo(() => {
@@ -52,9 +53,3 @@ const AudioEffects = (props) => {
 
   return null;
 };
-
-const mapStateToProps = (store) => ({
-  settings: store.settings,
-});
-
-export default connect(mapStateToProps)(AudioEffects);

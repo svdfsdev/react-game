@@ -1,10 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getDisplayValue } from '../../utils/helper';
 import './Statistics.scss';
 import { Table } from 'react-bootstrap';
 
-const Statistics = ({ statistics }) => {
+export const Statistics = () => {
+  const statistics = useSelector((state) => state.statistics);
   const results = [...statistics.results.slice(0, 10)].sort(
     (a, b) => b.score - a.score
   );
@@ -45,9 +46,3 @@ const Statistics = ({ statistics }) => {
     </div>
   );
 };
-
-const mapStateToProps = (store) => ({
-  statistics: store.statistics,
-});
-
-export default connect(mapStateToProps)(Statistics);
