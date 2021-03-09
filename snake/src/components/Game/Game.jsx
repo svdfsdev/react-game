@@ -40,7 +40,7 @@ export const Game = () => {
     setIsShowResult(false);
 
     setIsGameOver(false);
-  }, []);
+  }, [setScore, setTimer, setIsShowResult]);
 
   const resetGame = useCallback(() => {
     setScore(0);
@@ -49,13 +49,13 @@ export const Game = () => {
 
     setIsGameOver(true);
     setIsPlaying(false);
-  }, []);
+  }, [setScore, setTimer, setIsShowResult, setIsGameOver, setIsPlaying]);
 
   const finishGame = useCallback(() => {
     setIsPlaying(false);
     setIsGameOver(true);
     setIsShowResult(true);
-  }, []);
+  }, [setIsShowResult, setIsGameOver, setIsPlaying]);
 
   const startStopGame = useCallback(() => {
     if (isGameOver) {
@@ -63,21 +63,24 @@ export const Game = () => {
     }
 
     setIsPlaying((prev) => !prev);
-  }, [isGameOver, newGame]);
+  }, [isGameOver, newGame, setIsPlaying]);
 
   const setFullScreen = useCallback(() => {
     setIsFullScreen((prev) => !prev);
-  }, []);
+  }, [setIsFullScreen]);
 
   const increaseScore = useCallback(() => {
     setScore((prev) => prev + 1);
-  }, []);
+  }, [setScore]);
 
-  const timerHandler = useCallback((value) => {
-    setTimer(value);
-  }, []);
+  const timerHandler = useCallback(
+    (value) => {
+      setTimer(value);
+    },
+    [setTimer]
+  );
 
-  const autoPlayHandler = () => {
+  const autoPlayHandler = useCallback(() => {
     if (gameBorder) {
       dispatch({
         type: SET_BORDER,
@@ -85,7 +88,7 @@ export const Game = () => {
     }
 
     setIsAutoPlay((prev) => !prev);
-  };
+  }, [gameBorder, dispatch, setIsAutoPlay]);
 
   useEffect(() => {
     if (!isGameOver) {

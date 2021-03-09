@@ -5,8 +5,9 @@ import final from '../../assets/audio/final.mp3';
 import eat from '../../assets/audio/eat.mp3';
 
 export const AudioEffects = (props) => {
-  const settings = useSelector((state) => state.settings);
   const { isPlaying, isShowResult, score } = props;
+
+  const settings = useSelector((state) => state.settings);
   const { musicOn, musicVolume, soundOn, soundVolume } = settings;
 
   const gameMusic = useMemo(() => {

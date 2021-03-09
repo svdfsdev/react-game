@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { SAVE_PLAYER } from '../../actions/actionsTypes';
 import { savePlayer } from '../../utils/helper';
@@ -9,7 +9,7 @@ export const Registration = () => {
   const dispatch = useDispatch();
   const [name, setName] = useState('');
 
-  const savePlayerNameHandler = () => {
+  const savePlayerNameHandler = useCallback(() => {
     if (name.trim()) {
       savePlayer(name);
 
@@ -18,7 +18,7 @@ export const Registration = () => {
         payload: name,
       });
     }
-  };
+  }, [name, dispatch]);
 
   return (
     <div className="Registration">

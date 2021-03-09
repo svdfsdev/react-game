@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { levelsList, gameboard_bkg, prey_bkg } from '../../utils/guide';
 import './Settings.scss';
@@ -18,41 +18,63 @@ export const Settings = () => {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.settings);
 
-  const turnOnOffBorderHandler = () => dispatch({ type: SET_BORDER });
+  const turnOnOffBorderHandler = useCallback(() => {
+    dispatch({ type: SET_BORDER });
+  }, [dispatch]);
 
-  const turnOnOffMusicHandler = () => dispatch({ type: SET_MUSIC_ON_OFF });
+  const turnOnOffMusicHandler = useCallback(() => {
+    dispatch({ type: SET_MUSIC_ON_OFF });
+  }, [dispatch]);
 
-  const setMusicVolumeHandler = (volume) =>
-    dispatch({
-      type: SET_MUSIC_VOLUME,
-      payload: volume,
-    });
+  const setMusicVolumeHandler = useCallback(
+    (volume) =>
+      dispatch({
+        type: SET_MUSIC_VOLUME,
+        payload: volume,
+      }),
+    [dispatch]
+  );
 
-  const turnOnOffSoundHandler = () => dispatch({ type: SET_SOUND_ON_OFF });
+  const turnOnOffSoundHandler = useCallback(
+    () => dispatch({ type: SET_SOUND_ON_OFF }),
+    [dispatch]
+  );
 
-  const setSoundVolumeHandler = (volume) =>
-    dispatch({
-      type: SET_SOUND_VOLUME,
-      payload: volume,
-    });
+  const setSoundVolumeHandler = useCallback(
+    (volume) =>
+      dispatch({
+        type: SET_SOUND_VOLUME,
+        payload: volume,
+      }),
+    [dispatch]
+  );
 
-  const setGameLevelHandler = (level) =>
-    dispatch({
-      type: SET_LEVEL,
-      payload: level,
-    });
+  const setGameLevelHandler = useCallback(
+    (level) =>
+      dispatch({
+        type: SET_LEVEL,
+        payload: level,
+      }),
+    [dispatch]
+  );
 
-  const setGameboardBkgHandler = (img) =>
-    dispatch({
-      type: SET_GAMEBOARD_BKG,
-      payload: img,
-    });
+  const setGameboardBkgHandler = useCallback(
+    (img) =>
+      dispatch({
+        type: SET_GAMEBOARD_BKG,
+        payload: img,
+      }),
+    [dispatch]
+  );
 
-  const setPreyImgHandler = (img) =>
-    dispatch({
-      type: SET_PREY_IMG,
-      payload: img,
-    });
+  const setPreyImgHandler = useCallback(
+    (img) =>
+      dispatch({
+        type: SET_PREY_IMG,
+        payload: img,
+      }),
+    [dispatch]
+  );
 
   return (
     <div className="Settings">

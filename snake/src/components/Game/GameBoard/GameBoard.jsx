@@ -242,7 +242,15 @@ export const GameBoard = ({
     }
 
     setDirection(dir);
-  }, [prey.x, prey.y, snakeHeadY, snakeHeadX, direction, validateDirection]);
+  }, [
+    prey.x,
+    prey.y,
+    snakeHeadY,
+    snakeHeadX,
+    direction,
+    setDirection,
+    validateDirection,
+  ]);
 
   const drawGame = useCallback(() => {
     if (isAutoPlay) {
