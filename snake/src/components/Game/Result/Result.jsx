@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { getDisplayValue } from '../../../utils/helper';
 import './Result.scss';
 import { Button } from 'react-bootstrap';
@@ -6,12 +7,7 @@ import { Button } from 'react-bootstrap';
 export const Result = ({ box, score, timer, isShowResult, newGame }) => {
   const minutes = getDisplayValue(Math.trunc(timer / 60));
   const seconds = getDisplayValue(timer % 60);
-
-  const classes = ['Result'];
-
-  if (isShowResult) {
-    classes.push('visible');
-  }
+  const classes = classNames('Result', { visible: isShowResult });
 
   const newGameBtn = {
     label: 'New game',
@@ -20,7 +16,7 @@ export const Result = ({ box, score, timer, isShowResult, newGame }) => {
 
   return (
     <div
-      className={classes.join(' ')}
+      className={classes}
       style={{
         width: box * 30 + 'px',
         height: box * 18 + 'px',

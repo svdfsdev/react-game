@@ -68,13 +68,6 @@ export async function saveStatistics(game) {
 export async function savePlayer(name) {
   localStorage.playerName = name;
 
-  console.log(
-    JSON.stringify({
-      name: name,
-      statistics: [],
-    })
-  );
-
   await fetch(`${url}/add-user`, {
     method: 'POST',
     headers: {
@@ -85,4 +78,11 @@ export async function savePlayer(name) {
       statistics: [],
     }),
   });
+}
+
+export async function getStatistics() {
+  const allStat = await fetch(`${url}/statistics/${localStorage.playerName}`);
+  const res = await allStat.json();
+
+  return res;
 }

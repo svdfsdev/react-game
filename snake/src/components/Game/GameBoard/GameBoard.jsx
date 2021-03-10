@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { getRandomNumber } from '../../../utils/helper';
+import classNames from 'classnames';
 import {
   DIRECTION_DOWN,
   DIRECTION_LEFT,
@@ -28,6 +29,7 @@ export const GameBoard = ({
   gameBoard,
   gamePrey,
 }) => {
+  const classes = classNames('GameBoard', { border: border });
   const [snakeHeadX, setSnakeHeadX] = useState(0);
   const [snakeHeadY, setSnakeHeadY] = useState(0);
   const [prey, setPrey] = useState({ x: null, y: null });
@@ -325,19 +327,9 @@ export const GameBoard = ({
     [snake, box]
   );
 
-  const gameBoardClasses = useMemo(() => {
-    const cls = ['GameBoard'];
-
-    if (border) {
-      cls.push('border');
-    }
-
-    return cls.join(' ');
-  }, [border]);
-
   return (
     <div
-      className={gameBoardClasses}
+      className={classes}
       style={{ width: RIGHT_BORDER, height: BOTTOM_BORDER }}
     >
       <GameboardBkg bkg={gameBoard} />

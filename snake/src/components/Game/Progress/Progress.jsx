@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getDisplayValue } from '../../../utils/helper';
+import classNames from 'classnames';
 import './Progress.scss';
 
 export const Progress = ({
@@ -38,12 +39,10 @@ export const Progress = ({
 
   const minutes = getDisplayValue(Math.trunc(timer / 60));
   const seconds = getDisplayValue(timer % 60);
-  const classes = ['Progress'];
-
-  if (!isGameOver) classes.push('visible');
+  const classes = classNames('Progress', { visible: !isGameOver });
 
   return (
-    <div className={classes.join(' ')}>
+    <div className={classes}>
       <span>Score: {score}</span>
 
       {isAutoPlay && <span className="autoplay">Auto playing</span>}

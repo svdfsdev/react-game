@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { fullScreenOpen, fullScreenCancel } from '../../../utils/helper';
+import classNames from 'classnames';
 import './Controls.scss';
 import { Button } from 'react-bootstrap';
 
@@ -11,11 +12,7 @@ export const Controls = ({
   autoPlayHandler,
 }) => {
   const app = useRef();
-  const classes = ['Controls'];
-
-  if (isGameOver) {
-    classes.push('visible');
-  }
+  const classes = classNames('Controls', { visible: isGameOver });
 
   const playBtn = {
     label: isPlaying ? 'Pause' : 'Play',
@@ -50,7 +47,7 @@ export const Controls = ({
   };
 
   return (
-    <div className={classes.join(' ')}>
+    <div className={classes}>
       <Button
         variant={autoPlayBtn.variant}
         onClick={autoPlayHandler}
