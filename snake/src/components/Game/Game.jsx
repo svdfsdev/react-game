@@ -1,6 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { initGameboard, saveStatistics } from '../../utils/helper';
+import {
+  initGameboard,
+  saveGameResultToLocalStorage,
+} from '../../utils/helper';
 import { levelsList } from '../../utils/guide';
 import './Game.scss';
 import { Progress } from './Progress/Progress';
@@ -8,7 +11,8 @@ import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 import { Result } from './Result/Result';
 import { AudioEffects } from './AudioEffects';
-import { SAVE_STATISTICS, SET_BORDER } from '../../actions/actionsTypes';
+import { SET_BORDER } from '../../actions/actionsTypes';
+import { saveGameResult } from '../../reducers/statistics';
 
 export const Game = () => {
   const [timer, setTimer] = useState(0);
@@ -100,11 +104,8 @@ export const Game = () => {
     if (isGameOver && isShowResult && timer > 0) {
       const game = { score, timer };
 
-      saveStatistics(game);
-      dispatch({
-        type: SAVE_STATISTICS,
-        payload: game,
-      });
+      saveGameResultToLocalStorage(game);
+      dispatch(saveGameResult(game));
     }
   }, [isGameOver, isShowResult, score, timer, dispatch]);
 

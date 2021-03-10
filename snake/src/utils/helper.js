@@ -43,7 +43,7 @@ export function unfocusButton(e) {
   e.target.blur();
 }
 
-export async function saveStatistics(game) {
+export async function saveGameResultToLocalStorage(game) {
   if (localStorage.results) {
     let localStat = JSON.parse(localStorage.results);
 
@@ -65,7 +65,7 @@ export async function saveStatistics(game) {
   });
 }
 
-export async function savePlayer(name) {
+export async function savePlayerToLocalStorage(name) {
   localStorage.playerName = name;
 
   await fetch(`${url}/add-user`, {

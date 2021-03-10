@@ -7,7 +7,3 @@ export const SET_GAMEBOARD_BKG = 'SET_GAMEBOARD_BKG';
 export const SET_PREY_IMG = 'SET_PREY_IMG';
 export const SET_BORDER = 'SET_BORDER';
 export const SET_LEVEL = 'SET_LEVEL';
-
-// Statistics
-export const SAVE_STATISTICS = 'SAVE_STATISTICS';
-export const SAVE_PLAYER = 'SAVE_PLAYER';

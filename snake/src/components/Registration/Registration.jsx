@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { SAVE_PLAYER } from '../../actions/actionsTypes';
-import { savePlayer } from '../../utils/helper';
+import { savePlayer } from '../../reducers/statistics';
+import { savePlayerToLocalStorage } from '../../utils/helper';
 import './Registration.scss';
 import { Form, Button } from 'react-bootstrap';
 
@@ -11,12 +11,8 @@ export const Registration = () => {
 
   const savePlayerNameHandler = useCallback(() => {
     if (name.trim()) {
-      savePlayer(name);
-
-      dispatch({
-        type: SAVE_PLAYER,
-        payload: name,
-      });
+      savePlayerToLocalStorage(name);
+      dispatch(savePlayer(name));
     }
   }, [name, dispatch]);
 

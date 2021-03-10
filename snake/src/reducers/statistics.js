@@ -1,25 +1,25 @@
-import { SAVE_PLAYER, SAVE_STATISTICS } from '../actions/actionsTypes';
+import { createAction, createReducer } from '@reduxjs/toolkit';
 
 const initialState = {
   player: localStorage.playerName || null,
   results: localStorage.results ? JSON.parse(localStorage.results) : [],
 };
 
-export function statisticsReducer(state = initialState, action) {
-  switch (action.type) {
-    case SAVE_STATISTICS:
-      return {
-        ...state,
-        results: [action.payload, ...state.results],
-      };
+const SAVE_PLAYER = 'statistics/savePlayer';
+export const savePlayer = createAction(SAVE_PLAYER);
 
-    case SAVE_PLAYER:
-      return {
-        ...state,
-        player: action.payload,
-      };
+const SAVE_GAME_RESULT = 'statistics/saveGameResult';
+export const saveGameResult = createAction(SAVE_GAME_RESULT);
 
-    default:
-      return state;
-  }
-}
+export const statisticsReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(savePlayer, (state, action) => ({
+      ...state,
+      player: action.payload,
+    }))
+    .addCase(saveGameResult, (state, action) => ({
+      ...state,
+      results: [action.payload, ...state.results],
+    }))
+    .addDefaultCase((state, action) => state);
+});

@@ -6,6 +6,7 @@ import { Table } from 'react-bootstrap';
 
 export const Statistics = () => {
   const statistics = useSelector((state) => state.statistics);
+  console.log(statistics);
 
   const results = useMemo(() => {
     return [...statistics.results.slice(0, 10)].sort(

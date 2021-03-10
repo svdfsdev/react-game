@@ -29,12 +29,13 @@ export const GameBoard = ({
   gameBoard,
   gamePrey,
 }) => {
-  const classes = classNames('GameBoard', { border: border });
   const [snakeHeadX, setSnakeHeadX] = useState(0);
   const [snakeHeadY, setSnakeHeadY] = useState(0);
   const [prey, setPrey] = useState({ x: null, y: null });
   const [snake, setSnake] = useState([{ x: null, y: null }]);
   const [direction, setDirection] = useState();
+
+  const classes = classNames('GameBoard', { border: border });
 
   const RIGHT_BORDER = useMemo(() => {
     return box * GAMEBOARD_WIDTH;
