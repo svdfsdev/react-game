@@ -11,8 +11,8 @@ import { Controls } from './Controls/Controls';
 import { GameBoard } from './GameBoard/GameBoard';
 import { Result } from './Result/Result';
 import { AudioEffects } from './AudioEffects';
-import { SET_BORDER } from '../../actions/actionsTypes';
 import { saveGameResult } from '../../reducers/statistics';
+import { setBorder } from '../../reducers/settings';
 
 export const Game = () => {
   const [timer, setTimer] = useState(0);
@@ -86,9 +86,7 @@ export const Game = () => {
 
   const autoPlayHandler = useCallback(() => {
     if (gameBorder) {
-      dispatch({
-        type: SET_BORDER,
-      });
+      dispatch(setBorder());
     }
 
     setIsAutoPlay((prev) => !prev);

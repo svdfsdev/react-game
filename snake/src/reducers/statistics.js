@@ -6,9 +6,10 @@ const initialState = {
 };
 
 const SAVE_PLAYER = 'statistics/savePlayer';
+const SAVE_GAME_RESULT = 'statistics/saveGameResult';
+
 export const savePlayer = createAction(SAVE_PLAYER);
 
-const SAVE_GAME_RESULT = 'statistics/saveGameResult';
 export const saveGameResult = createAction(SAVE_GAME_RESULT);
 
 export const statisticsReducer = createReducer(initialState, (builder) => {
@@ -17,9 +18,11 @@ export const statisticsReducer = createReducer(initialState, (builder) => {
       ...state,
       player: action.payload,
     }))
+
     .addCase(saveGameResult, (state, action) => ({
       ...state,
       results: [action.payload, ...state.results],
     }))
-    .addDefaultCase((state, action) => state);
+
+    .addDefaultCase((state) => state);
 });

@@ -1,78 +1,61 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { levelsList, gameboard_bkg, prey_bkg } from '../../utils/guide';
+import {
+  setBorder,
+  setDifficulty,
+  setGameBoardBkg,
+  setMusicOnOFF,
+  setMusicVolume,
+  setPreyImg,
+  setSoundOnOFF,
+  setSoundVolume,
+} from '../../reducers/settings';
 import './Settings.scss';
 import { Form } from 'react-bootstrap';
-import {
-  SET_BORDER,
-  SET_GAMEBOARD_BKG,
-  SET_LEVEL,
-  SET_MUSIC_ON_OFF,
-  SET_MUSIC_VOLUME,
-  SET_PREY_IMG,
-  SET_SOUND_ON_OFF,
-  SET_SOUND_VOLUME,
-} from '../../actions/actionsTypes';
 
 export const Settings = () => {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.settings);
 
   const turnOnOffBorderHandler = useCallback(() => {
-    dispatch({ type: SET_BORDER });
+    dispatch(setBorder());
   }, [dispatch]);
-
-  const turnOnOffMusicHandler = useCallback(() => {
-    dispatch({ type: SET_MUSIC_ON_OFF });
-  }, [dispatch]);
-
-  const setMusicVolumeHandler = useCallback(
-    (volume) =>
-      dispatch({
-        type: SET_MUSIC_VOLUME,
-        payload: volume,
-      }),
-    [dispatch]
-  );
-
-  const turnOnOffSoundHandler = useCallback(
-    () => dispatch({ type: SET_SOUND_ON_OFF }),
-    [dispatch]
-  );
-
-  const setSoundVolumeHandler = useCallback(
-    (volume) =>
-      dispatch({
-        type: SET_SOUND_VOLUME,
-        payload: volume,
-      }),
-    [dispatch]
-  );
-
-  const setGameLevelHandler = useCallback(
-    (level) =>
-      dispatch({
-        type: SET_LEVEL,
-        payload: level,
-      }),
-    [dispatch]
-  );
 
   const setGameboardBkgHandler = useCallback(
-    (img) =>
-      dispatch({
-        type: SET_GAMEBOARD_BKG,
-        payload: img,
-      }),
+    (img) => dispatch(setGameBoardBkg(img)),
     [dispatch]
   );
 
   const setPreyImgHandler = useCallback(
-    (img) =>
-      dispatch({
-        type: SET_PREY_IMG,
-        payload: img,
-      }),
+    (img) => {
+      dispatch(setPreyImg(img));
+    },
+    [dispatch]
+  );
+
+  const setGameLevelHandler = useCallback(
+    (level) => dispatch(setDifficulty(level)),
+    [dispatch]
+  );
+
+  const turnOnOffMusicHandler = useCallback(() => {
+    dispatch(setMusicOnOFF());
+  }, [dispatch]);
+
+  const setMusicVolumeHandler = useCallback(
+    (volume) => dispatch(setMusicVolume(volume)),
+    [dispatch]
+  );
+
+  const turnOnOffSoundHandler = useCallback(() => {
+    dispatch(setSoundOnOFF());
+  }, [dispatch]);
+
+  const setSoundVolumeHandler = useCallback(
+    (volume) => {
+      dispatch(setSoundVolume(volume));
+    },
     [dispatch]
   );
 
